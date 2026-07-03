@@ -1,10 +1,10 @@
-const CACHE = 'bt-block-order-v2-v8-4-summary-polish';
+const CACHE = 'bt-block-order-v2-v8-5-update-button-fix';
 const FILES = [
   './',
   './index.html',
-  './styles.css?v=8.4',
-  './blocks.js?v=8.4',
-  './app.js?v=8.4', './summary.js?v=8.4', './jobs.js?v=8.4', './updates.js?v=8.4',
+  './styles.css?v=8.5',
+  './blocks.js?v=8.5',
+  './app.js?v=8.5', './summary.js?v=8.5', './jobs.js?v=8.5', './updates.js?v=8.5',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
