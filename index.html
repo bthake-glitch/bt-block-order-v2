@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BT Block Order</title>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-yellow-192.png">
+<link rel="apple-touch-icon" href="icon-yellow-512.png">
+<meta name="theme-color" content="#f5c400">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <h1>BLOCK ORDER</h1>
+  <div class="sub">200 Series Concrete Masonry Units</div>
+  <div class="actions"><button class="primary" onclick="copyOrder()">Copy Order</button><button onclick="checkForUpdate()">Update</button><button class="clear" onclick="clearAll()">Clear All</button></div>
+
+  <div class="star-note">Tap ★ to mark common blocks. Gold stars stay at the top.</div>
+  <button class="job-toggle" onclick="toggleJobPanel()" type="button">
+    <span>📂 Job</span>
+    <span id="jobArrow">▼</span>
+  </button>
+  <div class="job-summary" id="jobSummary">No saved job selected</div>
+  <div class="series-bar" aria-label="Block series selector">
+  <button class="series-btn active" data-series="200" onclick="selectSeries('200')" type="button">200mm</button>
+  <button class="series-btn" data-series="150" onclick="selectSeries('150')" type="button">150mm</button>
+  <button class="series-btn" data-series="100" onclick="selectSeries('100')" type="button">100mm</button>
+  <button class="series-btn" data-series="300" onclick="selectSeries('300')" type="button">300mm</button>
+  <button class="series-btn" data-series="Capping" onclick="selectSeries('Capping')" type="button">Capping</button>
+  <button class="series-btn" data-series="All" onclick="selectSeries('All')" type="button">All</button>
+</div>
+  <div class="job-panel collapsed" id="jobPanel">
+    <label>Saved Jobs
+      <select id="jobSelect" onchange="loadSelectedJob()">
+        <option value="">Saved Jobs</option>
+      </select>
+    </label>
+    <label>Job Name
+      <input id="jobName" placeholder="e.g. 55 York St" oninput="markJobChanged()">
+    </label>
+    <label>Site Address
+      <input id="siteAddress" placeholder="e.g. 55 York Street, Indooroopilly" oninput="markJobChanged()">
+    </label>
+    <label>Supplier Name
+      <input id="supplierName" placeholder="e.g. ABC Masonry Supplies" oninput="markJobChanged()">
+    </label>
+    <label>Supplier Phone
+      <input id="supplierPhone" inputmode="tel" placeholder="e.g. 0412 345 678" oninput="markJobChanged()">
+    </label>
+    <label>Supplier Email
+      <input id="supplierEmail" inputmode="email" placeholder="e.g. orders@supplier.com" oninput="markJobChanged()">
+    </label>
+    <div class="job-actions">
+      <button onclick="saveJob()" type="button">💾 Save</button>
+      <button onclick="newJob()" type="button">+ New</button>
+      <button class="clear" onclick="deleteJob()" type="button">Delete</button>
+    </div>
+  </div>
+
+</header>
+<main id="list"></main>
+<div class="small">Product details taken from the supplied South Queensland Besser Block & Brick Guide, March 2026. Series: 100mm, 150mm, 200mm, 300mm and Capping.</div>
+<div class="small">BT Block Order v2 · Version 7.0</div>
+<div class="update-banner" id="updateBanner">New version available <button onclick="applyUpdate()">Reload</button></div>
+<div class="dev-badge">V7.0 · FRESH</div>
+<div class="footer"><div class="total-box" aria-live="polite"><div class="total-label">ORDER TOTAL</div><div class="total-value" id="orderTotal">0</div></div><button class="summary-btn" onclick="showMaterialsSummary()">Summary</button><button class="clear" onclick="clearAll()">Clear All</button></div>
+<div class="summary-modal" id="summaryModal" onclick="if(event.target===this) closeMaterialsSummary()">
+  <div class="summary-card" role="dialog" aria-modal="true" aria-labelledby="summaryTitle">
+    <div class="summary-head"><span id="summaryTitle">Materials Summary</span></div>
+    <div class="summary-text" id="summaryText"></div>
+    <div class="summary-actions">
+      <button class="copy-summary" onclick="copyMaterialsSummary()" type="button">📋 Copy</button>
+      <button class="text-summary" onclick="textMaterialsSummary()" type="button">💬 Text</button>
+      <button class="email-summary" onclick="emailMaterialsSummary()" type="button">📧 Email</button>
+      <button class="print-summary" onclick="printMaterialsSummary()" type="button">🖨 Print</button>
+      <button class="close-summary" onclick="closeMaterialsSummary()" type="button">✖ Close</button>
+    </div>
+  </div>
+</div>
+<script src="blocks.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
