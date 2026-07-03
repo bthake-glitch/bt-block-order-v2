@@ -1,4 +1,4 @@
-const CACHE = 'bt-block-order-v2-v8-8-cache-reset';
+const CACHE = 'bt-block-order-v2-v8-9-summary-layout';
 
 self.addEventListener('install', event => {
   self.skipWaiting();
@@ -12,13 +12,26 @@ self.addEventListener('activate', event => {
   })());
 });
 
+async function freshOrCache(request){
+  const cache = await caches.open(CACHE);
+  try{
+    const fresh = await fetch(request, { cache: 'reload' });
+    if(fresh && fresh.ok) await cache.put(request, fresh.clone());
+    return fresh;
+  }catch(err){
+    const cached = await cache.match(request);
+    if(cached) return cached;
+    if(request.mode === 'navigate') return cache.match('./index.html');
+    throw err;
+  }
+}
+
 self.addEventListener('fetch', event => {
   const request = event.request;
   if(request.method !== 'GET') return;
   const url = new URL(request.url);
   if(url.origin !== location.origin) return;
-  // Network-first, no stored app shell. This prevents old versions sticking.
-  event.respondWith(fetch(request, { cache: 'no-store' }).catch(() => fetch(request)));
+  event.respondWith(freshOrCache(request));
 });
 
 self.addEventListener('message', event => {

@@ -84,29 +84,25 @@ function renderBlocks(){
 renderBlocks();
 updateTotals();
 async function copyOrder(){
-  let lines=['BT BLOCK ORDER',''];
-  const jobName=(document.getElementById('jobName')?.value||'').trim();
-  const siteAddress=(document.getElementById('siteAddress')?.value||'').trim();
-  if(jobName) lines.push('Job: '+jobName);
-  if(siteAddress) lines.push('Address: '+siteAddress);
-  if(jobName || siteAddress) lines.push('');
-  for(const b of blocks){
-    const v = readQty(sid(b.code,'order'));
-    if(v > 0) lines.push(`${b.code}  ${b.name}  -  ${palletLabel(v)}`);
-  }
-  const hasOrder = blocks.some(b => readQty(sid(b.code,'order')) > 0);
-  if(!hasOrder){alert('No order quantities filled in yet.');return}
-  const text=lines.join('\n');
+  const text = typeof getShareSummaryText === 'function' ? getShareSummaryText() : '';
+  if(!text){ alert('No order quantities filled in yet.'); return; }
   try{
     await navigator.clipboard.writeText(text);
     alert('Order copied. Paste into SMS, email or notes.');
   }catch(e){
-    prompt('Copy this order:',text);
+    prompt('Copy this order:', text);
   }
 }
 
 function clearAll(){
  if(!confirm('Clear all On Site and Order quantities?')) return;
- for(const b of blocks){for(const t of ['on','order']){const id=sid(b.code,t);localStorage.removeItem(id);document.getElementById(id).value=''}}
+ for(const b of blocks){
+   for(const t of ['on','order']){
+     const id=sid(b.code,t);
+     localStorage.removeItem(id);
+     const el=document.getElementById(id);
+     if(el) el.value='';
+   }
+ }
  updateTotals();
 }
