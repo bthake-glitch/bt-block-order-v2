@@ -1,8 +1,13 @@
-BT Block Order v2 · v7.4 PALLETS
+BT Block Order v2 v8.0 Clean Baseline
 
-Change:
-- Quantities are now labelled as pallet/pallets.
-- Summary, Copy, Text, Email and Print clearly show pallet quantities.
-- Bottom total now reads Total Pallets to Order.
+Upload/replace all files in the bt-block-order-v2 repository.
 
-Upload all extracted files to the bt-block-order-v2 GitHub repository.
+This version keeps the working app but splits the code into cleaner files:
+- app.js
+- summary.js
+- jobs.js
+- updates.js
+- blocks.js
+- styles.css
+
+Badge should show: V8.0 · CLEAN BASELINE

@@ -1,10 +1,10 @@
-const CACHE = 'bt-block-order-v2-v7-4-pallets';
+const CACHE = 'bt-block-order-v2-v8-0-clean-baseline';
 const FILES = [
   './',
   './index.html',
   './styles.css',
   './blocks.js',
-  './app.js',
+  './app.js', './summary.js', './jobs.js', './updates.js',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
