@@ -163,9 +163,10 @@ function escHtml(value){
 
 function buildMaterialsSummaryHtml(){
   const data = getMaterialsSummaryData();
-  if(!data.rows.length) return '';
+  const orderRows = data.rows.filter(r => r.orderQty > 0);
+  if(!orderRows.length) return '';
   let html = '';
-  if(data.jobName || data.siteAddress){
+  if(data.jobName || data.siteAddress || data.supplierName){
     html += '<div class="summary-job">';
     if(data.jobName) html += '<div class="summary-job-title">📦 '+escHtml(data.jobName)+'</div>';
     if(data.siteAddress) html += '<div class="summary-job-address">'+escHtml(data.siteAddress)+'</div>';
@@ -173,31 +174,26 @@ function buildMaterialsSummaryHtml(){
     html += '</div>';
   }
   html += '<div class="summary-list">';
-  for(const r of data.rows){
+  for(const r of orderRows){
     html += '<div class="summary-block">';
     html += '<div class="summary-block-head"><div class="summary-block-code">'+escHtml(r.code)+'</div><div class="summary-block-name">'+escHtml(r.name)+'</div></div>';
-    html += '<div class="summary-block-qty">';
-    html += '<div class="summary-on"><span class="summary-label">ON SITE</span><span class="summary-num">'+r.onQty+'</span></div>';
+    html += '<div class="summary-block-qty summary-block-qty-order-only">';
     html += '<div class="summary-order"><span class="summary-label">ORDER</span><span class="summary-num">'+r.orderQty+'</span></div>';
-    html += '<div><span class="summary-label">TOTAL</span><span class="summary-num">'+r.rowTotal+'</span></div>';
     html += '</div></div>';
   }
   html += '</div>';
   html += '<div class="summary-totals">';
-  html += '<div><span class="summary-label">ON SITE TOTAL</span><span class="summary-num">'+data.onTotal+'</span></div>';
-  html += '<div><span class="summary-label">ORDER TOTAL</span><span class="summary-num">'+data.orderTotal+'</span></div>';
-  html += '<div class="summary-total-wide"><span class="summary-label">TOTAL BLOCKS</span><span class="summary-num">'+data.grandTotal+'</span></div>';
-  html += '<div><span class="summary-label">BLOCK TYPES USED</span><span class="summary-num">'+data.usedTypes+'</span></div>';
+  html += '<div class="summary-total-wide"><span class="summary-label">ORDER TOTAL</span><span class="summary-num">'+data.orderTotal+'</span></div>';
   html += '</div>';
   return html;
 }
 
 function showMaterialsSummary(){
-  const text = buildMaterialsSummary();
-  if(!text){ alert('No quantities filled in yet.'); return; }
+  const html = buildMaterialsSummaryHtml();
+  if(!html){ alert('No order quantities filled in yet.'); return; }
   const modal = document.getElementById('summaryModal');
   const output = document.getElementById('summaryText');
-  if(output) output.innerHTML = buildMaterialsSummaryHtml();
+  if(output) output.innerHTML = html;
   if(modal) modal.style.display = 'flex';
 }
 

@@ -136,3 +136,11 @@ main{padding:4px 10px 46px;}
   :root{--card-head-h:38px;--card-body-h:72px;}
   .body{grid-template-columns:29% minmax(0,71%);}
 }
+/* v7.3 summary page order-only cards */
+.summary-block-qty-order-only{
+  grid-template-columns:1fr !important;
+}
+.summary-block-qty-order-only .summary-order{
+  border-color:#e33333;
+  background:#fff7f7;
+}
