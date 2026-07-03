@@ -1,5 +1,12 @@
-const APP_VERSION = '8.2-update-fix';
+const APP_VERSION = '8.3-update-prompt';
 let refreshingForUpdate = false;
+let updateRegistration = null;
+let updateCheckStarted = false;
+
+function showUpdateBanner(){
+  const banner = document.getElementById('updateBanner');
+  if(banner) banner.style.display = 'block';
+}
 
 async function clearAppCaches(){
   if('caches' in window){
@@ -10,14 +17,24 @@ async function clearAppCaches(){
 
 async function applyUpdate(){
   try{
+    if(updateRegistration && updateRegistration.waiting){
+      updateRegistration.waiting.postMessage({type:'SKIP_WAITING'});
+      return;
+    }
+
     await clearAppCaches();
+
     if('serviceWorker' in navigator){
       const regs = await navigator.serviceWorker.getRegistrations();
       for(const reg of regs){
-        if(reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
+        if(reg.waiting){
+          reg.waiting.postMessage({type:'SKIP_WAITING'});
+          return;
+        }
         await reg.update();
       }
     }
+
     location.reload();
   }catch(e){
     location.reload();
@@ -26,10 +43,44 @@ async function applyUpdate(){
 
 async function checkForUpdate(){
   try{
-    await applyUpdate();
+    if(!('serviceWorker' in navigator)){
+      location.reload();
+      return;
+    }
+
+    const reg = await navigator.serviceWorker.getRegistration();
+    if(reg){
+      updateRegistration = reg;
+      await reg.update();
+      if(reg.waiting){
+        showUpdateBanner();
+        return;
+      }
+    }
+
+    showUpdateBanner();
   }catch(e){
     location.reload();
   }
+}
+
+function watchRegistration(reg){
+  updateRegistration = reg;
+
+  if(reg.waiting){
+    showUpdateBanner();
+  }
+
+  reg.addEventListener('updatefound', () => {
+    const worker = reg.installing;
+    if(!worker) return;
+    worker.addEventListener('statechange', () => {
+      if(worker.state === 'installed' && navigator.serviceWorker.controller){
+        updateRegistration = reg;
+        showUpdateBanner();
+      }
+    });
+  });
 }
 
 async function registerServiceWorker(){
@@ -42,18 +93,15 @@ async function registerServiceWorker(){
     });
 
     const reg = await navigator.serviceWorker.register('./sw.js?v=' + APP_VERSION, {updateViaCache:'none'});
+    watchRegistration(reg);
     await reg.update();
 
-    reg.addEventListener('updatefound', () => {
-      const worker = reg.installing;
-      if(!worker) return;
-      worker.addEventListener('statechange', () => {
-        if(worker.state === 'installed' && navigator.serviceWorker.controller){
-          const banner = document.getElementById('updateBanner');
-          if(banner) banner.style.display = 'block';
-        }
-      });
-    });
+    if(!updateCheckStarted){
+      updateCheckStarted = true;
+      setInterval(() => {
+        if(updateRegistration) updateRegistration.update().catch(()=>{});
+      }, 60000);
+    }
   }catch(e){
     console.log('Service worker registration failed', e);
   }
@@ -61,14 +109,15 @@ async function registerServiceWorker(){
 
 async function autoCheckForUpdate(){
   try{
-    if(!('serviceWorker' in navigator)) return;
-    const reg = await navigator.serviceWorker.getRegistration();
-    if(!reg) return;
-    await reg.update();
+    if(updateRegistration) await updateRegistration.update();
   }catch(e){}
 }
 
 window.addEventListener('load', () => {
   registerServiceWorker();
   setTimeout(autoCheckForUpdate, 1200);
+});
+
+document.addEventListener('visibilitychange', () => {
+  if(!document.hidden) autoCheckForUpdate();
 });

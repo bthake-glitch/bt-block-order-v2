@@ -1,12 +1,11 @@
-BT Block Order v2 - v8.2 UPDATE FIX
+BT Block Order v2 - v8.3 UPDATE PROMPT
 
-Fix:
-- App now uses network-first cache so installed phone app updates without uninstalling.
-- Update button clears old caches and reloads.
-- Service worker cache version updated.
+Change:
+- Adds a visible Update Available banner.
+- Adds Reload to Update button.
+- Checks for new versions on app open, when returning to the app, and every 60 seconds.
 - Keeps v8.1 readable pallet quantity layout.
+- Keeps all v8.0 clean baseline files.
 
-Using GitHub Desktop:
-1. Copy all files in this folder into your bt-block-order-v2 project folder.
-2. Commit: v8.2 update fix
-3. Push origin.
+GitHub Desktop commit summary:
+v8.3 update prompt
