@@ -1,6 +1,5 @@
-BT Block Order v8.5 UPDATE FIX
+BT Block Order v2 - v8.6 UPDATE SOLID
 
-Fixes the Update Available button so it clears the old app cache/service worker and reloads a fresh copy from GitHub Pages.
-
-Commit summary:
-v8.5 update button fix
+Copy all files in this folder into your GitHub Desktop project folder.
+Commit summary: v8.6 update solid
+Then Push origin.

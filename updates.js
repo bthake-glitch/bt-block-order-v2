@@ -1,7 +1,6 @@
-const APP_VERSION = '8.5-update-button-fix';
-let refreshingForUpdate = false;
+const APP_VERSION = '8.6';
 let updateRegistration = null;
-let updateCheckStarted = false;
+let refreshingForUpdate = false;
 
 function showUpdateBanner(){
   const banner = document.getElementById('updateBanner');
@@ -26,22 +25,24 @@ function reloadFresh(){
 }
 
 async function applyUpdate(){
-  try{
-    hideUpdateBanner();
+  hideUpdateBanner();
 
-    // If a new worker is waiting, activate it first.
+  try{
     if(updateRegistration && updateRegistration.waiting){
       updateRegistration.waiting.postMessage({type:'SKIP_WAITING'});
-      setTimeout(reloadFresh, 1200);
+      setTimeout(reloadFresh, 700);
       return;
     }
 
-    // Strong fallback: remove the old service worker/cache and reload from the network.
+    if(navigator.serviceWorker && navigator.serviceWorker.controller){
+      navigator.serviceWorker.controller.postMessage({type:'CLEAR_CACHES'});
+    }
+
     await clearAppCaches();
 
     if('serviceWorker' in navigator){
       const regs = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(regs.map(reg => reg.unregister()));
+      await Promise.all(regs.map(reg => reg.update().catch(()=>{})));
     }
 
     reloadFresh();
@@ -50,24 +51,34 @@ async function applyUpdate(){
   }
 }
 
+async function checkVersionFile(){
+  try{
+    const res = await fetch('./version.json?v=' + Date.now(), {cache:'no-store'});
+    if(!res.ok) return;
+    const data = await res.json();
+    if(data && data.version && data.version !== APP_VERSION){
+      showUpdateBanner();
+    }
+  }catch(e){}
+}
+
 async function checkForUpdate(){
   try{
-    if(!('serviceWorker' in navigator)){
-      reloadFresh();
-      return;
-    }
+    await checkVersionFile();
 
-    const reg = await navigator.serviceWorker.getRegistration();
-    if(reg){
-      updateRegistration = reg;
-      await reg.update();
-      if(reg.waiting){
-        showUpdateBanner();
-        return;
+    if('serviceWorker' in navigator){
+      const reg = await navigator.serviceWorker.getRegistration();
+      if(reg){
+        updateRegistration = reg;
+        await reg.update();
+        if(reg.waiting){
+          showUpdateBanner();
+          return;
+        }
       }
     }
 
-    // Manual Update button now does a real fresh reload instead of only showing the banner.
+    // Manual Update button should always force a clean reload.
     await applyUpdate();
   }catch(e){
     reloadFresh();
@@ -77,9 +88,7 @@ async function checkForUpdate(){
 function watchRegistration(reg){
   updateRegistration = reg;
 
-  if(reg.waiting){
-    showUpdateBanner();
-  }
+  if(reg.waiting) showUpdateBanner();
 
   reg.addEventListener('updatefound', () => {
     const worker = reg.installing;
@@ -95,6 +104,7 @@ function watchRegistration(reg){
 
 async function registerServiceWorker(){
   if(!('serviceWorker' in navigator)) return;
+
   try{
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       if(refreshingForUpdate) return;
@@ -102,32 +112,21 @@ async function registerServiceWorker(){
       reloadFresh();
     });
 
-    const reg = await navigator.serviceWorker.register('./sw.js?v=' + APP_VERSION, {updateViaCache:'none'});
+    const reg = await navigator.serviceWorker.register('./sw.js?v=' + APP_VERSION, { updateViaCache: 'none' });
     watchRegistration(reg);
     await reg.update();
 
-    if(!updateCheckStarted){
-      updateCheckStarted = true;
-      setInterval(() => {
-        if(updateRegistration) updateRegistration.update().catch(()=>{});
-      }, 60000);
-    }
+    setInterval(checkVersionFile, 60000);
   }catch(e){
     console.log('Service worker registration failed', e);
   }
 }
 
-async function autoCheckForUpdate(){
-  try{
-    if(updateRegistration) await updateRegistration.update();
-  }catch(e){}
-}
-
 window.addEventListener('load', () => {
   registerServiceWorker();
-  setTimeout(autoCheckForUpdate, 1200);
+  setTimeout(checkVersionFile, 1500);
 });
 
 document.addEventListener('visibilitychange', () => {
-  if(!document.hidden) autoCheckForUpdate();
+  if(!document.hidden) checkVersionFile();
 });
