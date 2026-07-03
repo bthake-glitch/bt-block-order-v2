@@ -1,13 +1,12 @@
-BT Block Order v2 v8.1 Quantity Readable
+BT Block Order v2 - v8.2 UPDATE FIX
 
 Fix:
-- Keeps pallet wording.
-- Makes quantity numbers readable again on mobile.
-- Restores enough height for the input boxes above the + and - buttons.
+- App now uses network-first cache so installed phone app updates without uninstalling.
+- Update button clears old caches and reloads.
+- Service worker cache version updated.
+- Keeps v8.1 readable pallet quantity layout.
 
-Upload with GitHub Desktop:
-1. Copy all files into your local bt-block-order-v2 folder.
-2. Commit: v8.1 quantity readable
+Using GitHub Desktop:
+1. Copy all files in this folder into your bt-block-order-v2 project folder.
+2. Commit: v8.2 update fix
 3. Push origin.
-
-Badge should show: V8.1 · QTY READABLE

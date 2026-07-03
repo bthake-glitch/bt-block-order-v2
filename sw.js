@@ -1,4 +1,4 @@
-const CACHE = 'bt-block-order-v2-v8-1-qty-readable';
+const CACHE = 'bt-block-order-v2-v8-2-update-fix';
 const FILES = [
   './',
   './index.html',
@@ -12,24 +12,41 @@ const FILES = [
   './icon-yellow-512.png'
 ];
 
-self.addEventListener('install', e => {
+self.addEventListener('install', event => {
   self.skipWaiting();
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)));
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES)));
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
-      .then(() => self.clients.claim())
-  );
+self.addEventListener('activate', event => {
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.map(key => key === CACHE ? null : caches.delete(key)));
+    await self.clients.claim();
+  })());
 });
 
-self.addEventListener('fetch', e => {
-  const req = e.request;
-  if(req.mode === 'navigate'){
-    e.respondWith(fetch(req).catch(() => caches.match('./index.html')));
-    return;
+async function networkFirst(request){
+  const cache = await caches.open(CACHE);
+  try{
+    const fresh = await fetch(request, {cache:'no-store'});
+    if(fresh && fresh.ok) cache.put(request, fresh.clone());
+    return fresh;
+  }catch(err){
+    const cached = await cache.match(request);
+    if(cached) return cached;
+    if(request.mode === 'navigate') return cache.match('./index.html');
+    throw err;
   }
-  e.respondWith(caches.match(req).then(r => r || fetch(req)));
+}
+
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  if(request.method !== 'GET') return;
+  const url = new URL(request.url);
+  if(url.origin !== location.origin) return;
+  event.respondWith(networkFirst(request));
+});
+
+self.addEventListener('message', event => {
+  if(event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
 });

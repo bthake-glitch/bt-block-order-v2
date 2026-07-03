@@ -1,4 +1,5 @@
-let updateReady = false;
+const APP_VERSION = '8.2-update-fix';
+let refreshingForUpdate = false;
 
 async function clearAppCaches(){
   if('caches' in window){
@@ -10,8 +11,14 @@ async function clearAppCaches(){
 async function applyUpdate(){
   try{
     await clearAppCaches();
-    const base = location.origin + location.pathname;
-    location.replace(base + '?updated=' + Date.now());
+    if('serviceWorker' in navigator){
+      const regs = await navigator.serviceWorker.getRegistrations();
+      for(const reg of regs){
+        if(reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
+        await reg.update();
+      }
+    }
+    location.reload();
   }catch(e){
     location.reload();
   }
@@ -19,27 +26,34 @@ async function applyUpdate(){
 
 async function checkForUpdate(){
   try{
-    if('serviceWorker' in navigator){
-      const regs = await navigator.serviceWorker.getRegistrations();
-      for(const reg of regs){
-        await reg.update();
-      }
-    }
-    await clearAppCaches();
-    alert('Update check done. The app will reload now.');
-    applyUpdate();
+    await applyUpdate();
   }catch(e){
-    alert('Update check done. The app will reload now.');
-    applyUpdate();
+    location.reload();
   }
 }
-
 
 async function registerServiceWorker(){
   if(!('serviceWorker' in navigator)) return;
   try{
-    const reg = await navigator.serviceWorker.register('./sw.js');
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if(refreshingForUpdate) return;
+      refreshingForUpdate = true;
+      location.reload();
+    });
+
+    const reg = await navigator.serviceWorker.register('./sw.js?v=' + APP_VERSION, {updateViaCache:'none'});
     await reg.update();
+
+    reg.addEventListener('updatefound', () => {
+      const worker = reg.installing;
+      if(!worker) return;
+      worker.addEventListener('statechange', () => {
+        if(worker.state === 'installed' && navigator.serviceWorker.controller){
+          const banner = document.getElementById('updateBanner');
+          if(banner) banner.style.display = 'block';
+        }
+      });
+    });
   }catch(e){
     console.log('Service worker registration failed', e);
   }
@@ -51,15 +65,10 @@ async function autoCheckForUpdate(){
     const reg = await navigator.serviceWorker.getRegistration();
     if(!reg) return;
     await reg.update();
-    if(reg.waiting || reg.installing){
-      const banner = document.getElementById('updateBanner');
-      if(banner) banner.style.display = 'block';
-    }
   }catch(e){}
 }
 
 window.addEventListener('load', () => {
   registerServiceWorker();
-  setTimeout(autoCheckForUpdate, 1500);
+  setTimeout(autoCheckForUpdate, 1200);
 });
-
