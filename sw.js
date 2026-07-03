@@ -1,4 +1,4 @@
-const CACHE = 'bt-block-order-v2-v7-3-summary-page-all';
+const CACHE = 'bt-block-order-v2-v7-4-pallets';
 const FILES = [
   './',
   './index.html',

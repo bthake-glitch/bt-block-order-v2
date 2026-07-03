@@ -144,3 +144,12 @@ main{padding:4px 10px 46px;}
   border-color:#e33333;
   background:#fff7f7;
 }
+
+/* v7.4 pallet labels */
+.qty-wrap{grid-template-rows:24px 26px 20px !important;}
+.qty-wrap input{grid-column:1 / 3;grid-row:1 / span 2;}
+.qty-unit{grid-column:1 / 3;grid-row:3;font-size:10px;font-weight:900;text-align:center;color:#444;line-height:1;margin-top:-2px;}
+.summary-block-qty-order-only .summary-num,.summary-total-wide .summary-num{white-space:nowrap;font-size:18px;}
+.total-label{font-size:9px;}
+.total-value{font-size:18px;white-space:nowrap;}
+@media(max-width:420px){.qty-wrap{grid-template-rows:22px 24px 17px !important;}.qty-unit{font-size:9px;}.summary-block-qty-order-only .summary-num,.summary-total-wide .summary-num{font-size:16px;}.total-value{font-size:16px;}}

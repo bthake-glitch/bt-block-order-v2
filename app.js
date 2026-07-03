@@ -26,6 +26,15 @@ function readQty(id){
   const n = parseInt(raw || '0', 10);
   return Number.isFinite(n) ? n : 0;
 }
+function palletLabel(value){
+  const n = parseInt(value || '0', 10) || 0;
+  return n === 1 ? '1 pallet' : n + ' pallets';
+}
+function palletWord(value){
+  const n = parseInt(value || '0', 10) || 0;
+  return n === 1 ? 'pallet' : 'pallets';
+}
+
 function writeQty(id, value){
   const el = document.getElementById(id);
   if(!el) return;
@@ -44,7 +53,7 @@ function updateTotals(){
     orderTotal += readQty(sid(b.code,'order'));
   }
   const el = document.getElementById('orderTotal');
-  if(el) el.textContent = String(orderTotal);
+  if(el) el.textContent = palletLabel(orderTotal);
 }
 
 function selectSeries(series){
@@ -67,8 +76,8 @@ function renderBlocks(){
  const card=document.createElement('section'); card.className='card';
  card.innerHTML=`<div class="head"><div class="code">${b.code}</div><div class="name"><button class="fav-star ${isFav(b.code) ? 'fav' : ''}" onclick="toggleFav('${b.code}')" type="button">★</button><span class="name-text">${b.name}</span></div></div>
  <div class="body"><div class="drawing series-${b.series || '200'}"><img src="${b.img}" alt="${b.code} ${b.name}"><div class="dim-big">${b.dim || DIMENSIONS_BY_CODE[b.code] || ""}</div></div>
- <div class="fields"><label class="on">ON SITE<div class="qty-wrap"><button class="qty-step" type="button" onclick="stepQty('${on}',-1)">−</button><input inputmode="numeric" pattern="[0-9]*" id="${on}" value="${localStorage.getItem(on)||''}" oninput="localStorage.setItem('${on}',this.value);updateTotals()"><button class="qty-step" type="button" onclick="stepQty('${on}',1)">+</button></div></label>
- <label class="order">ORDER<div class="qty-wrap"><button class="qty-step" type="button" onclick="stepQty('${order}',-1)">−</button><input inputmode="numeric" pattern="[0-9]*" id="${order}" value="${localStorage.getItem(order)||''}" oninput="localStorage.setItem('${order}',this.value);updateTotals()"><button class="qty-step" type="button" onclick="stepQty('${order}',1)">+</button></div></label></div></div>`;
+ <div class="fields"><label class="on">ON SITE<div class="qty-wrap"><button class="qty-step" type="button" onclick="stepQty('${on}',-1)">−</button><input inputmode="numeric" pattern="[0-9]*" id="${on}" value="${localStorage.getItem(on)||''}" oninput="localStorage.setItem('${on}',this.value);updateTotals()"><div class="qty-unit">pallets</div><button class="qty-step" type="button" onclick="stepQty('${on}',1)">+</button></div></label>
+ <label class="order">ORDER<div class="qty-wrap"><button class="qty-step" type="button" onclick="stepQty('${order}',-1)">−</button><input inputmode="numeric" pattern="[0-9]*" id="${order}" value="${localStorage.getItem(order)||''}" oninput="localStorage.setItem('${order}',this.value);updateTotals()"><div class="qty-unit">pallets</div><button class="qty-step" type="button" onclick="stepQty('${order}',1)">+</button></div></label></div></div>`;
  list.appendChild(card);
 }
 }
@@ -83,7 +92,7 @@ async function copyOrder(){
   if(jobName || siteAddress) lines.push('');
   for(const b of blocks){
     const v = readQty(sid(b.code,'order'));
-    if(v > 0) lines.push(`${b.code}  ${b.name}  -  ${v}`);
+    if(v > 0) lines.push(`${b.code}  ${b.name}  -  ${palletLabel(v)}`);
   }
   const hasOrder = blocks.some(b => readQty(sid(b.code,'order')) > 0);
   if(!hasOrder){alert('No order quantities filled in yet.');return}
@@ -129,12 +138,12 @@ function buildMaterialsSummary(){
   lines.push('BLOCKS');
   for(const r of data.rows){
     lines.push(`${r.code}  ${r.name}`);
-    lines.push(`  On Site: ${r.onQty}   Order: ${r.orderQty}   Total: ${r.rowTotal}`);
+    lines.push(`  On Site: ${palletLabel(r.onQty)}   Order: ${palletLabel(r.orderQty)}   Total: ${palletLabel(r.rowTotal)}`);
   }
   lines.push('');
-  lines.push('ON SITE TOTAL: '+data.onTotal);
-  lines.push('ORDER TOTAL: '+data.orderTotal);
-  lines.push('TOTAL BLOCKS: '+data.grandTotal);
+  lines.push('ON SITE TOTAL: '+palletLabel(data.onTotal));
+  lines.push('ORDER TOTAL: '+palletLabel(data.orderTotal));
+  lines.push('TOTAL PALLETS: '+palletLabel(data.grandTotal));
   lines.push('BLOCK TYPES USED: '+data.usedTypes);
   return lines.join('\n');
 }
@@ -150,10 +159,10 @@ function buildShareSummary(){
   if(data.jobName || data.siteAddress || data.supplierName) lines.push('');
   lines.push('BLOCKS TO ORDER');
   for(const r of orderRows){
-    lines.push(`${r.code}  ${r.name}  -  ${r.orderQty}`);
+    lines.push(`${r.code}  ${r.name}  -  ${palletLabel(r.orderQty)}`);
   }
   lines.push('');
-  lines.push('ORDER TOTAL: '+data.orderTotal);
+  lines.push('ORDER TOTAL: '+palletLabel(data.orderTotal));
   return lines.join('\n');
 }
 
@@ -178,12 +187,12 @@ function buildMaterialsSummaryHtml(){
     html += '<div class="summary-block">';
     html += '<div class="summary-block-head"><div class="summary-block-code">'+escHtml(r.code)+'</div><div class="summary-block-name">'+escHtml(r.name)+'</div></div>';
     html += '<div class="summary-block-qty summary-block-qty-order-only">';
-    html += '<div class="summary-order"><span class="summary-label">ORDER</span><span class="summary-num">'+r.orderQty+'</span></div>';
+    html += '<div class="summary-order"><span class="summary-label">ORDER</span><span class="summary-num">'+palletLabel(r.orderQty)+'</span></div>';
     html += '</div></div>';
   }
   html += '</div>';
   html += '<div class="summary-totals">';
-  html += '<div class="summary-total-wide"><span class="summary-label">ORDER TOTAL</span><span class="summary-num">'+data.orderTotal+'</span></div>';
+  html += '<div class="summary-total-wide"><span class="summary-label">ORDER TOTAL</span><span class="summary-num">'+palletLabel(data.orderTotal)+'</span></div>';
   html += '</div>';
   return html;
 }
