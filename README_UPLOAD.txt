@@ -1,13 +1,13 @@
-BT Block Order v2 v8.0 Clean Baseline
+BT Block Order v2 v8.1 Quantity Readable
 
-Upload/replace all files in the bt-block-order-v2 repository.
+Fix:
+- Keeps pallet wording.
+- Makes quantity numbers readable again on mobile.
+- Restores enough height for the input boxes above the + and - buttons.
 
-This version keeps the working app but splits the code into cleaner files:
-- app.js
-- summary.js
-- jobs.js
-- updates.js
-- blocks.js
-- styles.css
+Upload with GitHub Desktop:
+1. Copy all files into your local bt-block-order-v2 folder.
+2. Commit: v8.1 quantity readable
+3. Push origin.
 
-Badge should show: V8.0 · CLEAN BASELINE
+Badge should show: V8.1 · QTY READABLE
