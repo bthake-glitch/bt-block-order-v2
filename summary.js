@@ -64,11 +64,37 @@ function escHtml(value){
   return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 }
 
+function getSeriesLabel(series){
+  const labels = {
+    '200':'200 SERIES',
+    '150':'150 SERIES',
+    '100':'100 SERIES',
+    '300':'300 SERIES',
+    'Capping':'CAPPING SERIES'
+  };
+  return labels[series || '200'] || String(series || 'OTHER').toUpperCase();
+}
+
+function getRowsGroupedBySeries(rows){
+  const order = ['200','150','100','300','Capping'];
+  const groups = new Map();
+  for(const row of rows){
+    const block = blocks.find(b => b.code === row.code && b.name === row.name) || blocks.find(b => b.code === row.code);
+    const series = block?.series || '200';
+    if(!groups.has(series)) groups.set(series, []);
+    groups.get(series).push(row);
+  }
+  return order.filter(series => groups.has(series)).map(series => ({series, rows:groups.get(series)}));
+}
+
 function buildMaterialsSummaryHtml(){
   const data = getMaterialsSummaryData();
   const orderRows = data.rows.filter(r => r.orderQty > 0);
   if(!orderRows.length) return '';
-  let html = '';
+
+  const groups = getRowsGroupedBySeries(orderRows);
+  let html = '<div class="summary-title-card"><div class="summary-main-title">BT BLOCK ORDER</div><div class="summary-sub-title">Materials Summary</div></div>';
+
   if(data.jobName || data.siteAddress || data.supplierName){
     html += '<div class="summary-job">';
     if(data.jobName) html += '<div class="summary-job-title">📦 '+escHtml(data.jobName)+'</div>';
@@ -76,18 +102,25 @@ function buildMaterialsSummaryHtml(){
     if(data.supplierName) html += '<div class="summary-job-address">Supplier: '+escHtml(data.supplierName)+'</div>';
     html += '</div>';
   }
-  html += '<div class="summary-list">';
-  for(const r of orderRows){
-    html += '<div class="summary-block">';
-    html += '<div class="summary-block-head"><div class="summary-block-code">'+escHtml(r.code)+'</div><div class="summary-block-name">'+escHtml(r.name)+'</div></div>';
-    html += '<div class="summary-block-qty summary-block-qty-order-only">';
-    html += '<div class="summary-order"><span class="summary-label">ORDER</span><span class="summary-num">'+palletLabel(r.orderQty)+'</span></div>';
-    html += '</div></div>';
+
+  html += '<div class="summary-series-list">';
+  for(const group of groups){
+    const seriesTotal = group.rows.reduce((sum, r) => sum + r.orderQty, 0);
+    html += '<section class="summary-series-card summary-series-'+escHtml(group.series)+'">';
+    html += '<div class="summary-series-head"><span>'+escHtml(getSeriesLabel(group.series))+'</span><strong>'+palletLabel(seriesTotal)+'</strong></div>';
+    html += '<div class="summary-series-rows">';
+    for(const r of group.rows){
+      html += '<div class="summary-row">';
+      html += '<div class="summary-row-code">'+escHtml(r.code)+'</div>';
+      html += '<div class="summary-row-name">'+escHtml(r.name)+'</div>';
+      html += '<div class="summary-row-qty">'+palletLabel(r.orderQty)+'</div>';
+      html += '</div>';
+    }
+    html += '</div></section>';
   }
   html += '</div>';
-  html += '<div class="summary-totals">';
-  html += '<div class="summary-total-wide"><span class="summary-label">ORDER TOTAL</span><span class="summary-num">'+palletLabel(data.orderTotal)+'</span></div>';
-  html += '</div>';
+
+  html += '<div class="summary-grand-total"><span>TOTAL PALLETS TO ORDER</span><strong>'+palletLabel(data.orderTotal)+'</strong></div>';
   return html;
 }
 

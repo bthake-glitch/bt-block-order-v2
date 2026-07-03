@@ -1,4 +1,4 @@
-const APP_VERSION = '8.3-update-prompt';
+const APP_VERSION = '8.4-summary-polish';
 let refreshingForUpdate = false;
 let updateRegistration = null;
 let updateCheckStarted = false;
