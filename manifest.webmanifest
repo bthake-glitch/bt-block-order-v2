@@ -1,7 +1,7 @@
 {
-  "name": "BT Block Order DEV",
-  "short_name": "BT DEV",
-  "start_url": "./index.html",
+  "name": "BT Block Order",
+  "short_name": "BT Order",
+  "start_url": "./index.html?v=8.8",
   "display": "standalone",
   "background_color": "#111111",
   "theme_color": "#f5c400",
