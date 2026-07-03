@@ -1,4 +1,4 @@
-BT Block Order v2 · v7.1 SHARE CLEAN
+BT Block Order v2 · v7.2 SUMMARY ALL
 
 Fix:
 - Summary screen still shows full job totals on screen.
@@ -11,4 +11,4 @@ Upload ALL files from this zip into the repository: bt-block-order-v2
 Chrome link:
 https://bthake-glitch.github.io/bt-block-order-v2/
 
-Badge should show: V7.1 · SHARE CLEAN
+Badge should show: V7.2 · SUMMARY ALL

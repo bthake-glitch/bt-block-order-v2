@@ -22,8 +22,8 @@ function sid(code,type){return type+'_'+code.replace(/[^a-zA-Z0-9]/g,'_')}
 
 function readQty(id){
   const el = document.getElementById(id);
-  if(!el) return 0;
-  const n = parseInt(el.value || '0', 10);
+  const raw = el ? el.value : localStorage.getItem(id);
+  const n = parseInt(raw || '0', 10);
   return Number.isFinite(n) ? n : 0;
 }
 function writeQty(id, value){
@@ -82,10 +82,10 @@ async function copyOrder(){
   if(siteAddress) lines.push('Address: '+siteAddress);
   if(jobName || siteAddress) lines.push('');
   for(const b of blocks){
-    const v=document.getElementById(sid(b.code,'order')).value.trim();
-    if(v) lines.push(`${b.code}  ${b.name}  -  ${v}`);
+    const v = readQty(sid(b.code,'order'));
+    if(v > 0) lines.push(`${b.code}  ${b.name}  -  ${v}`);
   }
-  const hasOrder = blocks.some(b => document.getElementById(sid(b.code,'order')).value.trim());
+  const hasOrder = blocks.some(b => readQty(sid(b.code,'order')) > 0);
   if(!hasOrder){alert('No order quantities filled in yet.');return}
   const text=lines.join('\n');
   try{
