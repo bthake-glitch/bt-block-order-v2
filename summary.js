@@ -107,7 +107,8 @@ function buildMaterialsSummaryHtml(){
   for(const group of groups){
     const seriesTotal = group.rows.reduce((sum, r) => sum + r.orderQty, 0);
     html += '<section class="summary-series-card summary-series-'+escHtml(group.series)+'">';
-    html += '<div class="summary-series-head"><span>'+escHtml(getSeriesLabel(group.series))+'</span><strong>'+palletLabel(seriesTotal)+'</strong></div>';
+    const itemText = group.rows.length === 1 ? '1 item' : group.rows.length + ' items';
+    html += '<div class="summary-series-head"><div><span>'+escHtml(getSeriesLabel(group.series))+'</span><em>'+itemText+'</em></div><strong>'+palletLabel(seriesTotal)+'</strong></div>';
     html += '<div class="summary-series-rows">';
     for(const r of group.rows){
       html += '<div class="summary-row">';
