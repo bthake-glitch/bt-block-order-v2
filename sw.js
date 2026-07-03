@@ -1,4 +1,4 @@
-const CACHE = 'bt-block-order-v2-v7-0-fresh';
+const CACHE = 'bt-block-order-v2-v7-1-share-clean';
 const FILES = [
   './',
   './index.html',

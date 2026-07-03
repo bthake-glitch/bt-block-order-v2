@@ -1,21 +1,14 @@
-BT Block Order v2 · v7.0 FRESH REPO
+BT Block Order v2 · v7.1 SHARE CLEAN
 
-Upload ALL files from this zip into the NEW GitHub repository: bt-block-order-v2
+Fix:
+- Summary screen still shows full job totals on screen.
+- Copy, Text and Email now send/order-copy only the blocks to order.
+- Shared summary no longer shows On Site quantities.
+- Shared summary no longer includes Block Types Used.
 
-Files included:
-- index.html
-- styles.css
-- blocks.js
-- app.js
-- sw.js
-- manifest.webmanifest
-- icon files
-- .nojekyll
+Upload ALL files from this zip into the repository: bt-block-order-v2
 
-After uploading, turn on GitHub Pages:
-Settings → Pages → Deploy from a branch → main → /root → Save
-
-New Chrome link should be:
+Chrome link:
 https://bthake-glitch.github.io/bt-block-order-v2/
 
-Badge should show: V7.0 · FRESH
+Badge should show: V7.1 · SHARE CLEAN

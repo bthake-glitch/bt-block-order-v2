@@ -139,6 +139,24 @@ function buildMaterialsSummary(){
   return lines.join('\n');
 }
 
+function buildShareSummary(){
+  const data = getMaterialsSummaryData();
+  const orderRows = data.rows.filter(r => r.orderQty > 0);
+  if(!orderRows.length) return '';
+  let lines=['BT MATERIALS SUMMARY',''];
+  if(data.jobName) lines.push('Job: '+data.jobName);
+  if(data.siteAddress) lines.push('Address: '+data.siteAddress);
+  if(data.supplierName) lines.push('Supplier: '+data.supplierName);
+  if(data.jobName || data.siteAddress || data.supplierName) lines.push('');
+  lines.push('BLOCKS TO ORDER');
+  for(const r of orderRows){
+    lines.push(`${r.code}  ${r.name}  -  ${r.orderQty}`);
+  }
+  lines.push('');
+  lines.push('ORDER TOTAL: '+data.orderTotal);
+  return lines.join('\n');
+}
+
 function escHtml(value){
   return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 }
@@ -184,13 +202,16 @@ function showMaterialsSummary(){
 }
 
 function getCurrentSummaryText(){
-  const output = document.getElementById('summaryText');
   return buildMaterialsSummary();
 }
 
+function getShareSummaryText(){
+  return buildShareSummary();
+}
+
 async function copyMaterialsSummary(){
-  const text = getCurrentSummaryText();
-  if(!text){ alert('No quantities filled in yet.'); return; }
+  const text = getShareSummaryText();
+  if(!text){ alert('No order quantities filled in yet.'); return; }
   try{
     await navigator.clipboard.writeText(text);
     alert('Summary copied.');
@@ -204,8 +225,8 @@ function cleanPhone(value){
 }
 
 function textMaterialsSummary(){
-  const text = getCurrentSummaryText();
-  if(!text){ alert('No quantities filled in yet.'); return; }
+  const text = getShareSummaryText();
+  if(!text){ alert('No order quantities filled in yet.'); return; }
   const data = getMaterialsSummaryData();
   const phone = cleanPhone(data.supplierPhone);
   const body = encodeURIComponent(text);
@@ -217,8 +238,8 @@ function textMaterialsSummary(){
 }
 
 function emailMaterialsSummary(){
-  const text = getCurrentSummaryText();
-  if(!text){ alert('No quantities filled in yet.'); return; }
+  const text = getShareSummaryText();
+  if(!text){ alert('No order quantities filled in yet.'); return; }
   const jobName=(document.getElementById('jobName')?.value||'Block Order').trim() || 'Block Order';
   const subject = encodeURIComponent('BT Materials Summary - ' + jobName);
   const body = encodeURIComponent(text);
