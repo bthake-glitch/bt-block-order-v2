@@ -22,9 +22,9 @@ function updateJobSummary(statusText){
   const summary=document.getElementById('jobSummary');
   if(!summary) return;
   if(!name && !address){
-    summary.textContent = statusText || 'No saved job selected';
+    summary.textContent = statusText || 'No job selected';
   } else {
-    summary.textContent = (name || 'Unnamed Job') + (address ? ' — ' + address : '') + (supplier ? ' — ' + supplier : '') + (statusText ? ' ('+statusText+')' : '');
+    summary.textContent = (name || 'Unnamed Job') + (address ? ' • ' + address : '') + (supplier ? ' • ' + supplier : '') + (statusText ? ' • '+statusText : '');
   }
 }
 

@@ -60,7 +60,9 @@ function buildShareSummary(){
   if(data.jobName) lines.push('Job: ' + data.jobName);
   if(data.siteAddress) lines.push('Address: ' + data.siteAddress);
   if(data.supplierName) lines.push('Supplier: ' + data.supplierName);
-  if(data.jobName || data.siteAddress || data.supplierName) lines.push('');
+  if(data.supplierPhone) lines.push('Supplier Phone: ' + data.supplierPhone);
+  if(data.supplierEmail) lines.push('Supplier Email: ' + data.supplierEmail);
+  if(data.jobName || data.siteAddress || data.supplierName || data.supplierPhone || data.supplierEmail) lines.push('');
 
   for(const group of groups){
     const seriesTotal = group.rows.reduce((sum, r) => sum + r.orderQty, 0);
@@ -88,7 +90,7 @@ function buildMaterialsSummaryHtml(){
   html += '<div class="summary-title-card">';
   html += '<div class="summary-brand">BT BLOCK ORDER</div>';
   html += '<div class="summary-main-title">Materials Summary</div>';
-  html += '<div class="summary-sub-title">Pallet order sheet</div>';
+  html += '<div class="summary-sub-title">Professional pallet order sheet</div>';
   html += '</div>';
 
   html += '<div class="summary-status"><span>Ready to order</span><strong>'+escHtml(today)+'</strong></div>';
@@ -97,6 +99,8 @@ function buildMaterialsSummaryHtml(){
   html += '<div class="summary-meta-item"><span>Job</span><strong>'+escHtml(data.jobName || 'Not entered')+'</strong></div>';
   html += '<div class="summary-meta-item"><span>Site</span><strong>'+escHtml(data.siteAddress || 'Not entered')+'</strong></div>';
   html += '<div class="summary-meta-item"><span>Supplier</span><strong>'+escHtml(data.supplierName || 'Not entered')+'</strong></div>';
+  html += '<div class="summary-meta-item"><span>Supplier Phone</span><strong>'+escHtml(data.supplierPhone || 'Not entered')+'</strong></div>';
+  html += '<div class="summary-meta-item"><span>Supplier Email</span><strong>'+escHtml(data.supplierEmail || 'Not entered')+'</strong></div>';
   html += '<div class="summary-meta-item"><span>Order Date</span><strong>'+escHtml(today)+'</strong></div>';
   html += '</div>';
 
@@ -122,7 +126,7 @@ function buildMaterialsSummaryHtml(){
   }
   html += '</div>';
 
-  html += '<div class="summary-grand-total"><span>TOTAL PALLETS TO ORDER</span><strong>'+palletLabel(data.orderTotal)+'</strong></div>';
+  html += '<div class="summary-grand-total"><span>TOTAL PALLETS TO ORDER</span><strong>'+palletLabel(data.orderTotal)+'</strong><em>Check quantities before sending to supplier</em></div>';
   return html;
 }
 
@@ -207,7 +211,7 @@ function printMaterialsSummary(){
     .summary-row-qty{text-align:right;}
     .summary-grand-total{text-align:center;background:#ffea00;}
     .summary-grand-total span{display:block;font-size:12px;font-weight:900;}
-    .summary-grand-total strong{display:block;font-size:28px;font-weight:900;}
+    .summary-grand-total strong{display:block;font-size:28px;font-weight:900;} .summary-grand-total em{display:block;margin-top:5px;font-size:11px;font-weight:900;font-style:normal;}
   `;
   w.document.write('<!doctype html><html><head><title>Materials Summary</title><style>'+css+'</style></head><body>'+html+'<script>window.onload=function(){window.print();}<\/script></body></html>');
   w.document.close();

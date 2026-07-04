@@ -1,12 +1,14 @@
-BT Block Order v2 - v8.9 Summary Layout
+BT Block Order v2 - v9.0 Professional Polish
 
 Change:
-- Professional Materials Summary header.
-- Cleaner series heading cards.
-- Better spacing between rows and sections.
-- Better column alignment for code, block name and pallets.
-- Stronger total pallets panel at the bottom.
-- Keeps v8.8 cache reset/update files.
+- Cleaner BT branded header with app icon.
+- More professional Job area and saved job summary.
+- Better block card spacing, shadows, headings and alignment.
+- Professional Materials Summary / pallet order sheet layout.
+- Supplier phone and email now appear in the summary when entered.
+- Updated service worker cache and version files to v9.0.
+
+Upload/copy these files over your existing bt-block-order-v2 repo. This package includes app.js and blocks.js, so you can replace all files in one go.
 
 Commit summary:
-v8.9 summary layout
+v9.0 professional polish
