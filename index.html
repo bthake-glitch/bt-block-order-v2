@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="icon-yellow-512.png">
 <meta name="theme-color" content="#f5c400">
 
-<link rel="stylesheet" href="styles.css?v=9.4">
+<link rel="stylesheet" href="styles.css?v=9.5">
 </head>
 <body>
 <header>
@@ -43,20 +43,51 @@
         <option value="">Saved Jobs</option>
       </select>
     </label>
-    <label>Job Name
-      <input id="jobName" placeholder="e.g. 55 York St" oninput="markJobChanged()">
-    </label>
-    <label>Site Address
-      <input id="siteAddress" placeholder="e.g. 55 York Street, Indooroopilly" oninput="markJobChanged()">
-    </label>
-    <label>Supplier Name
-      <input id="supplierName" placeholder="e.g. ABC Masonry Supplies" oninput="markJobChanged()">
-    </label>
-    <label>Supplier Phone
-      <input id="supplierPhone" inputmode="tel" placeholder="e.g. 0412 345 678" oninput="markJobChanged()">
-    </label>
-    <label>Supplier Email
-      <input id="supplierEmail" inputmode="email" placeholder="e.g. orders@supplier.com" oninput="markJobChanged()">
+    <div class="job-section-title">Project Details</div>
+    <div class="job-grid">
+      <label>Job Name
+        <input id="jobName" placeholder="e.g. 55 York St" oninput="markJobChanged()">
+      </label>
+      <label>Site Address
+        <input id="siteAddress" placeholder="e.g. 55 York Street, Indooroopilly" oninput="markJobChanged()">
+      </label>
+      <label>Builder
+        <input id="builderName" placeholder="e.g. ABC Constructions" oninput="markJobChanged()">
+      </label>
+      <label>Supervisor
+        <input id="supervisorName" placeholder="e.g. Site Supervisor" oninput="markJobChanged()">
+      </label>
+      <label>Supervisor Phone
+        <input id="supervisorPhone" inputmode="tel" placeholder="e.g. 0400 000 000" oninput="markJobChanged()">
+      </label>
+      <label>Purchase Order No.
+        <input id="purchaseOrder" placeholder="e.g. PO-1047" oninput="markJobChanged()">
+      </label>
+      <label>Delivery Date
+        <input id="deliveryDate" type="date" oninput="markJobChanged()">
+      </label>
+      <label>Delivery Time
+        <input id="deliveryTime" placeholder="e.g. Morning / 7:00am" oninput="markJobChanged()">
+      </label>
+    </div>
+    <div class="job-section-title">Supplier Details</div>
+    <div class="job-grid">
+      <label>Supplier Name
+        <input id="supplierName" placeholder="e.g. ABC Masonry Supplies" oninput="markJobChanged()">
+      </label>
+      <label>Supplier Contact
+        <input id="supplierContact" placeholder="e.g. Orders Desk" oninput="markJobChanged()">
+      </label>
+      <label>Supplier Phone
+        <input id="supplierPhone" inputmode="tel" placeholder="e.g. 0412 345 678" oninput="markJobChanged()">
+      </label>
+      <label>Supplier Email
+        <input id="supplierEmail" inputmode="email" placeholder="e.g. orders@supplier.com" oninput="markJobChanged()">
+      </label>
+    </div>
+    <div class="job-section-title">Delivery Notes</div>
+    <label>Delivery Instructions
+      <textarea id="deliveryInstructions" placeholder="e.g. Deliver to rear gate, call before unloading" oninput="markJobChanged()"></textarea>
     </label>
     <div class="job-actions">
       <button onclick="saveJob()" type="button">💾 Save</button>
@@ -68,9 +99,9 @@
 </header>
 <main id="list"></main>
 <div class="small">Product details taken from the supplied South Queensland Besser Block & Brick Guide, March 2026. Series: 100mm, 150mm, 200mm, 300mm and Capping.</div>
-<div class="small">BT Block Order v2 · Version 9.4</div>
+<div class="small">BT Block Order v2 · Version 9.5</div>
 <div class="update-banner" id="updateBanner">Update available <button onclick="applyUpdate()">Update now</button></div>
-<div class="dev-badge">V9.4 · VISUAL POLISH</div>
+<div class="dev-badge">V9.5 · JOB DETAILS</div>
 <div class="footer"><div class="total-box" aria-live="polite"><div class="total-label">TOTAL PALLETS TO ORDER</div><div class="total-value" id="orderTotal">0 pallets</div></div><button class="summary-btn" onclick="showMaterialsSummary()">Summary</button><button class="clear" onclick="clearAll()">Clear All</button></div>
 <div class="summary-modal" id="summaryModal" onclick="if(event.target===this) closeMaterialsSummary()">
   <div class="summary-card" role="dialog" aria-modal="true" aria-labelledby="summaryTitle">
@@ -85,10 +116,10 @@
     </div>
   </div>
 </div>
-<script src="blocks.js?v=9.4"></script>
-<script src="app.js?v=9.4"></script>
-<script src="summary.js?v=9.4"></script>
-<script src="jobs.js?v=9.4"></script>
-<script src="updates.js?v=9.4"></script>
+<script src="blocks.js?v=9.5"></script>
+<script src="app.js?v=9.5"></script>
+<script src="summary.js?v=9.5"></script>
+<script src="jobs.js?v=9.5"></script>
+<script src="updates.js?v=9.5"></script>
 </body>
 </html>

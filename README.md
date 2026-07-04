@@ -1,9 +1,11 @@
-BT Block Order v2 - v9.4 Visual Polish
+BT Block Order v2 - v9.5 Job Details
 
 Change:
-- Keeps v9.3 CSS cleanup and stable v9.2.6 quantity panel.
-- Improves header, job panel, series buttons, block cards, footer and summary styling.
-- No workflow or JavaScript behaviour changes.
+- Adds builder, supervisor, purchase order and delivery details.
+- Adds supplier contact and delivery instructions.
+- Saved jobs now store the new fields.
+- Materials Summary, text, email and print outputs include the new job details.
+- Keeps the stable v9.4 look and the rebuilt quantity panel.
 
 Commit summary:
-v9.4 visual polish
+v9.5 job details

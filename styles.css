@@ -1154,7 +1154,7 @@ main{overflow:hidden;}
 }
 
 
-/* v9.4 visual polish - improved app look without changing behaviour or quantity-panel layout */
+/* v9.5 job details - improved app look without changing behaviour or quantity-panel layout */
 :root{
   --bg:#eeeeee;
   --line:#cfcfcf;
@@ -1354,4 +1354,49 @@ main{padding-top:7px;}
   header{padding-left:7px;padding-right:7px;}
   main{padding-left:8px;padding-right:8px;}
   .series-title::before,.series-title::after{width:15px;margin-left:6px;margin-right:6px;}
+}
+
+/* v9.5 job details */
+.job-section-title{
+  margin:8px 0 5px;
+  padding:5px 8px;
+  border:2px solid #111;
+  border-radius:9px;
+  background:#111;
+  color:#ffea00;
+  font-size:11px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.45px;
+}
+.job-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:5px;
+}
+.job-panel textarea{
+  width:100%;
+  min-height:64px;
+  border:2px solid #111;
+  border-radius:8px;
+  background:#fff;
+  color:#111;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:14px;
+  font-weight:800;
+  padding:7px;
+  resize:vertical;
+  line-height:1.25;
+}
+.summary-meta-wide{
+  grid-column:1 / -1;
+}
+.summary-meta-wide strong{
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+@media(min-width:720px){
+  .job-grid{grid-template-columns:1fr 1fr;}
+  .job-grid label:first-child,.job-grid label:nth-child(2){grid-column:auto;}
 }

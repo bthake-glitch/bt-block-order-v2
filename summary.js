@@ -1,9 +1,17 @@
 function getMaterialsSummaryData(){
   const jobName=(document.getElementById('jobName')?.value||'').trim();
   const siteAddress=(document.getElementById('siteAddress')?.value||'').trim();
+  const builderName=(document.getElementById('builderName')?.value||'').trim();
+  const supervisorName=(document.getElementById('supervisorName')?.value||'').trim();
+  const supervisorPhone=(document.getElementById('supervisorPhone')?.value||'').trim();
+  const purchaseOrder=(document.getElementById('purchaseOrder')?.value||'').trim();
+  const deliveryDate=(document.getElementById('deliveryDate')?.value||'').trim();
+  const deliveryTime=(document.getElementById('deliveryTime')?.value||'').trim();
   const supplierName=(document.getElementById('supplierName')?.value||'').trim();
+  const supplierContact=(document.getElementById('supplierContact')?.value||'').trim();
   const supplierPhone=(document.getElementById('supplierPhone')?.value||'').trim();
   const supplierEmail=(document.getElementById('supplierEmail')?.value||'').trim();
+  const deliveryInstructions=(document.getElementById('deliveryInstructions')?.value||'').trim();
   let onTotal=0, orderTotal=0, usedTypes=0;
   const rows=[];
   for(const b of blocks){
@@ -17,11 +25,18 @@ function getMaterialsSummaryData(){
       rows.push({code:b.code, name:b.name, series:b.series || '200', onQty, orderQty, rowTotal});
     }
   }
-  return {jobName, siteAddress, supplierName, supplierPhone, supplierEmail, onTotal, orderTotal, usedTypes, rows, grandTotal:onTotal + orderTotal};
+  return {jobName, siteAddress, builderName, supervisorName, supervisorPhone, purchaseOrder, deliveryDate, deliveryTime, supplierName, supplierContact, supplierPhone, supplierEmail, deliveryInstructions, onTotal, orderTotal, usedTypes, rows, grandTotal:onTotal + orderTotal};
 }
 
 function escHtml(value){
   return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function formatDateForSummary(value){
+  if(!value) return '';
+  const parts = String(value).split('-');
+  if(parts.length === 3) return parts[2] + '/' + parts[1] + '/' + parts[0];
+  return value;
 }
 
 function getSeriesLabel(series){
@@ -58,11 +73,19 @@ function buildShareSummary(){
   const groups = getRowsGroupedBySeries(orderRows);
   const lines = ['BT BLOCK ORDER', 'MATERIALS SUMMARY', ''];
   if(data.jobName) lines.push('Job: ' + data.jobName);
-  if(data.siteAddress) lines.push('Address: ' + data.siteAddress);
+  if(data.siteAddress) lines.push('Site: ' + data.siteAddress);
+  if(data.builderName) lines.push('Builder: ' + data.builderName);
+  if(data.supervisorName) lines.push('Supervisor: ' + data.supervisorName);
+  if(data.supervisorPhone) lines.push('Supervisor Phone: ' + data.supervisorPhone);
+  if(data.purchaseOrder) lines.push('Purchase Order: ' + data.purchaseOrder);
+  if(data.deliveryDate) lines.push('Delivery Date: ' + formatDateForSummary(data.deliveryDate));
+  if(data.deliveryTime) lines.push('Delivery Time: ' + data.deliveryTime);
   if(data.supplierName) lines.push('Supplier: ' + data.supplierName);
+  if(data.supplierContact) lines.push('Supplier Contact: ' + data.supplierContact);
   if(data.supplierPhone) lines.push('Supplier Phone: ' + data.supplierPhone);
   if(data.supplierEmail) lines.push('Supplier Email: ' + data.supplierEmail);
-  if(data.jobName || data.siteAddress || data.supplierName || data.supplierPhone || data.supplierEmail) lines.push('');
+  if(data.deliveryInstructions) lines.push('Delivery Instructions: ' + data.deliveryInstructions);
+  if(data.jobName || data.siteAddress || data.builderName || data.supervisorName || data.purchaseOrder || data.deliveryDate || data.supplierName || data.deliveryInstructions) lines.push('');
 
   for(const group of groups){
     const seriesTotal = group.rows.reduce((sum, r) => sum + r.orderQty, 0);
@@ -98,10 +121,18 @@ function buildMaterialsSummaryHtml(){
   html += '<div class="summary-job summary-meta-grid">';
   html += '<div class="summary-meta-item"><span>Job</span><strong>'+escHtml(data.jobName || 'Not entered')+'</strong></div>';
   html += '<div class="summary-meta-item"><span>Site</span><strong>'+escHtml(data.siteAddress || 'Not entered')+'</strong></div>';
+  html += '<div class="summary-meta-item"><span>Builder</span><strong>'+escHtml(data.builderName || 'Not entered')+'</strong></div>';
+  html += '<div class="summary-meta-item"><span>Supervisor</span><strong>'+escHtml(data.supervisorName || 'Not entered')+'</strong></div>';
+  html += '<div class="summary-meta-item"><span>Supervisor Phone</span><strong>'+escHtml(data.supervisorPhone || 'Not entered')+'</strong></div>';
+  html += '<div class="summary-meta-item"><span>Purchase Order</span><strong>'+escHtml(data.purchaseOrder || 'Not entered')+'</strong></div>';
+  html += '<div class="summary-meta-item"><span>Delivery Date</span><strong>'+escHtml(formatDateForSummary(data.deliveryDate) || 'Not entered')+'</strong></div>';
+  html += '<div class="summary-meta-item"><span>Delivery Time</span><strong>'+escHtml(data.deliveryTime || 'Not entered')+'</strong></div>';
   html += '<div class="summary-meta-item"><span>Supplier</span><strong>'+escHtml(data.supplierName || 'Not entered')+'</strong></div>';
+  html += '<div class="summary-meta-item"><span>Supplier Contact</span><strong>'+escHtml(data.supplierContact || 'Not entered')+'</strong></div>';
   html += '<div class="summary-meta-item"><span>Supplier Phone</span><strong>'+escHtml(data.supplierPhone || 'Not entered')+'</strong></div>';
   html += '<div class="summary-meta-item"><span>Supplier Email</span><strong>'+escHtml(data.supplierEmail || 'Not entered')+'</strong></div>';
   html += '<div class="summary-meta-item"><span>Order Date</span><strong>'+escHtml(today)+'</strong></div>';
+  if(data.deliveryInstructions){ html += '<div class="summary-meta-item summary-meta-wide"><span>Delivery Instructions</span><strong>'+escHtml(data.deliveryInstructions)+'</strong></div>'; }
   html += '</div>';
 
   html += '<div class="summary-series-list">';
@@ -179,9 +210,10 @@ function emailMaterialsSummary(){
   const text = getShareSummaryText();
   if(!text){ alert('No order quantities filled in yet.'); return; }
   const jobName=(document.getElementById('jobName')?.value||'Block Order').trim() || 'Block Order';
-  const subject = encodeURIComponent('BT Materials Summary - ' + jobName);
-  const body = encodeURIComponent(text);
   const data = getMaterialsSummaryData();
+  const po = data.purchaseOrder ? ' - ' + data.purchaseOrder : '';
+  const subject = encodeURIComponent('BT Materials Summary - ' + jobName + po);
+  const body = encodeURIComponent(text);
   const to = data.supplierEmail ? encodeURIComponent(data.supplierEmail) : '';
   window.location.href = 'mailto:' + to + '?subject=' + subject + '&body=' + body;
 }
