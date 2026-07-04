@@ -1024,7 +1024,7 @@ main{overflow:hidden;}
 }
 
 
-/* v9.2.1 button fit fix - source-level quantity layout override */
+/* v9.2.1 quantity panel rebuild - source-level quantity layout override */
 .card .fields{
   display:grid !important;
   grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
@@ -1118,7 +1118,7 @@ main{overflow:hidden;}
 }
 
 
-/* v9.2.2 pallet label fix - keep labels visible without breaking button fit */
+/* v9.2.2 quantity panel rebuild - keep labels visible without breaking button fit */
 .card .fields > label{
   grid-template-rows:27px minmax(0,1fr) !important;
   gap:2px !important;
@@ -1535,4 +1535,129 @@ main{overflow:hidden;}
   .card .qty-wrap input{height:38px !important;min-height:38px !important;max-height:38px !important;font-size:32px !important;line-height:38px !important;}
   .card .qty-unit{height:12px !important;min-height:12px !important;font-size:9px !important;}
   .card .qty-step{height:30px !important;min-height:30px !important;max-height:30px !important;font-size:23px !important;}
+}
+
+/* v9.2.6 quantity panel rebuild - final clean layout
+   Keep everything inside the panel: ON SITE / PALLETS, number box, +/- buttons. */
+.card .fields{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  gap:8px !important;
+  padding:7px 8px !important;
+  align-items:stretch !important;
+  overflow:hidden !important;
+}
+.card .fields>label{
+  min-width:0 !important;
+  height:100% !important;
+  padding:6px 8px 7px !important;
+  border:2px solid #e6e6e6 !important;
+  border-radius:18px !important;
+  background:#fafafa !important;
+  display:grid !important;
+  grid-template-rows:28px minmax(0,1fr) !important;
+  gap:4px !important;
+  overflow:hidden !important;
+}
+.card .qty-title{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  height:28px !important;
+  min-height:28px !important;
+  max-height:28px !important;
+  font-size:13px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  letter-spacing:.2px !important;
+  text-align:center !important;
+  overflow:hidden !important;
+}
+.card .qty-title::after{
+  content:"PALLETS";
+  display:block;
+  margin-top:2px;
+  font-size:9px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.15px;
+  opacity:.9;
+}
+.card .qty-label-unit,
+.card .qty-unit{
+  display:none !important;
+}
+.card .qty-wrap{
+  min-width:0 !important;
+  min-height:0 !important;
+  width:100% !important;
+  height:100% !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  grid-template-rows:minmax(0,1fr) 28px !important;
+  gap:5px !important;
+  padding:0 !important;
+  overflow:hidden !important;
+}
+.card .qty-wrap input{
+  grid-column:1 / 3 !important;
+  grid-row:1 !important;
+  width:100% !important;
+  height:100% !important;
+  min-height:0 !important;
+  max-height:none !important;
+  margin:0 !important;
+  padding:0 4px !important;
+  box-sizing:border-box !important;
+  border-width:3px !important;
+  border-radius:10px !important;
+  background:#fff !important;
+  font-size:28px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  text-align:center !important;
+}
+.card .qty-step{
+  width:100% !important;
+  height:28px !important;
+  min-height:28px !important;
+  max-height:28px !important;
+  margin:0 !important;
+  padding:0 !important;
+  box-sizing:border-box !important;
+  border-width:3px !important;
+  border-radius:10px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:22px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+}
+.card .qty-step:first-of-type{grid-column:1 !important;grid-row:2 !important;}
+.card .qty-step:last-of-type{grid-column:2 !important;grid-row:2 !important;}
+
+@media(max-width:420px){
+  :root{--card-body-h:126px !important;}
+  .card .body{height:126px !important;grid-template-columns:30% minmax(0,70%) !important;}
+  .card .fields{gap:7px !important;padding:6px 7px !important;}
+  .card .fields>label{padding:6px 7px !important;grid-template-rows:26px minmax(0,1fr) !important;gap:4px !important;border-radius:16px !important;}
+  .card .qty-title{height:26px !important;min-height:26px !important;max-height:26px !important;font-size:12px !important;}
+  .card .qty-title::after{font-size:8px !important;margin-top:2px !important;}
+  .card .qty-wrap{grid-template-rows:minmax(0,1fr) 26px !important;gap:5px !important;}
+  .card .qty-wrap input{font-size:26px !important;border-radius:9px !important;}
+  .card .qty-step{height:26px !important;min-height:26px !important;max-height:26px !important;font-size:21px !important;border-radius:9px !important;}
+}
+
+@media(min-width:820px){
+  :root{--card-body-h:132px !important;}
+  .card .body{height:132px !important;}
+  .card .fields{gap:10px !important;padding:10px !important;}
+  .card .fields>label{grid-template-rows:32px minmax(0,1fr) !important;gap:7px !important;padding:8px 10px !important;}
+  .card .qty-title{height:32px !important;min-height:32px !important;max-height:32px !important;font-size:14px !important;}
+  .card .qty-title::after{font-size:10px !important;}
+  .card .qty-wrap{grid-template-rows:minmax(0,1fr) 34px !important;gap:7px !important;}
+  .card .qty-wrap input{font-size:34px !important;}
+  .card .qty-step{height:34px !important;min-height:34px !important;max-height:34px !important;font-size:25px !important;}
 }

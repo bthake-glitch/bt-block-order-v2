@@ -1,4 +1,4 @@
-const CACHE = 'bt-block-order-v2-v9-2-5-pallets-fit-fix';
+const CACHE = 'bt-block-order-v2-v9-2-6-qty-panel-rebuild';
 
 self.addEventListener('install', event => {
   self.skipWaiting();

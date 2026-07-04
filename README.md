@@ -1,9 +1,10 @@
-BT Block Order v2 - v9.2.3.3 Pallet Label Fix
+BT Block Order v2 - v9.2.6 Quantity Panel Rebuild
 
 Change:
-- Restores the PALLETS label under ON SITE and ORDER.
-- Keeps the v9.2.3.3 + and - button fit fix.
-- Keeps the v9.0/v9.2.3 look.
+- Rebuilt the On Site / Order quantity panels cleanly.
+- ON SITE / ORDER and PALLETS labels now sit above the number box.
+- + and - buttons stay inside the panel.
+- Keeps the v9.0 look.
 
 Commit summary:
-v9.2.3.3 pallet label fix
+v9.2.6 quantity panel rebuild
