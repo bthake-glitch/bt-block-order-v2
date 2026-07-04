@@ -1,4 +1,4 @@
-const CACHE = 'bt-block-order-v2-v9-8-2-iphone-input-fix';
+const CACHE = 'bt-block-order-v2-v9-8-4-cross-platform-qty';
 
 self.addEventListener('install', event => {
   self.skipWaiting();

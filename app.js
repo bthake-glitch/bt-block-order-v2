@@ -198,7 +198,7 @@ function syncQtyDisplay(id){
   const el = document.getElementById(id);
   document.querySelectorAll('[data-qty-for]').forEach(display => {
     if(display.getAttribute('data-qty-for') === id){
-      display.textContent = el && el.value ? el.value : '';
+      display.textContent = el && el.value ? el.value : '0';
     }
   });
 }
@@ -277,8 +277,8 @@ function renderBlocks(){
     const series = escAttr(b.series || '200');
     card.innerHTML = `<div class="head"><div class="code">${code}</div><div class="name"><button class="fav-star ${isFav(b.code) ? 'fav' : ''}" onclick="toggleFav('${code}')" type="button">★</button><span class="name-text">${name}</span></div></div>
       <div class="body"><div class="drawing series-${series}"><img src="${img}" alt="${code} ${name}"><div class="dim-big">${dim}</div></div>
-      <div class="fields"><label class="on"><div class="qty-title">ON SITE</div><div class="qty-wrap"><input type="hidden" id="${on}" value="${localStorage.getItem(on)||''}"><button class="qty-display" data-qty-for="${on}" type="button" onclick="editQty('${on}')">${localStorage.getItem(on)||''}</button><div class="qty-unit">PALLETS</div><button class="qty-step" type="button" onclick="stepQty('${on}',-1)">−</button><button class="qty-step" type="button" onclick="stepQty('${on}',1)">+</button></div></label>
-      <label class="order"><div class="qty-title">ORDER</div><div class="qty-wrap"><input type="hidden" id="${order}" value="${localStorage.getItem(order)||''}"><button class="qty-display" data-qty-for="${order}" type="button" onclick="editQty('${order}')">${localStorage.getItem(order)||''}</button><div class="qty-unit">PALLETS</div><button class="qty-step" type="button" onclick="stepQty('${order}',-1)">−</button><button class="qty-step" type="button" onclick="stepQty('${order}',1)">+</button></div></label></div></div>`;
+      <div class="fields"><div class="qty-panel on"><div class="qty-title">ON SITE</div><div class="qty-subtitle">PALLETS</div><input type="hidden" id="${on}" value="${localStorage.getItem(on)||''}"><div class="qty-control" role="group" aria-label="On site pallets"><button class="qty-step qty-minus" type="button" onclick="stepQty('${on}',-1)">−</button><button class="qty-value" data-qty-for="${on}" type="button" onclick="editQty('${on}')">${localStorage.getItem(on)||'0'}</button><button class="qty-step qty-plus" type="button" onclick="stepQty('${on}',1)">+</button></div></div>
+      <div class="qty-panel order"><div class="qty-title">ORDER</div><div class="qty-subtitle">PALLETS</div><input type="hidden" id="${order}" value="${localStorage.getItem(order)||''}"><div class="qty-control" role="group" aria-label="Order pallets"><button class="qty-step qty-minus" type="button" onclick="stepQty('${order}',-1)">−</button><button class="qty-value" data-qty-for="${order}" type="button" onclick="editQty('${order}')">${localStorage.getItem(order)||'0'}</button><button class="qty-step qty-plus" type="button" onclick="stepQty('${order}',1)">+</button></div></div></div></div>`;
     list.appendChild(card);
   }
 }
@@ -309,5 +309,8 @@ function clearAll(){
       if(el) el.value = '';
     }
   }
+  document.querySelectorAll('[data-qty-for]').forEach(display => {
+    display.textContent = '0';
+  });
   updateTotals();
 }
