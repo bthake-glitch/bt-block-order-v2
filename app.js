@@ -2,6 +2,41 @@ let currentSeries = localStorage.getItem('bt_block_order_current_series') || '20
 let currentSearch = localStorage.getItem('bt_block_order_search') || '';
 const list = document.getElementById('list');
 
+
+/* v9.7 soft tick feedback for quantity buttons */
+let btAudioContext = null;
+let btLastTickAt = 0;
+function playSoftTick(){
+  try{
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if(!AudioContextClass) return;
+    if(!btAudioContext) btAudioContext = new AudioContextClass();
+    if(btAudioContext.state === 'suspended') btAudioContext.resume().catch(()=>{});
+
+    const nowMs = Date.now();
+    if(nowMs - btLastTickAt < 35) return;
+    btLastTickAt = nowMs;
+
+    const t = btAudioContext.currentTime;
+    const osc = btAudioContext.createOscillator();
+    const gain = btAudioContext.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, t);
+    osc.frequency.exponentialRampToValueAtTime(520, t + 0.035);
+
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(0.045, t + 0.004);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.04);
+
+    osc.connect(gain);
+    gain.connect(btAudioContext.destination);
+    osc.start(t);
+    osc.stop(t + 0.045);
+  }catch(e){}
+}
+
+
 const FAV_KEY = 'bt_block_order_favourites_v1';
 function getFavs(){
   try { return JSON.parse(localStorage.getItem(FAV_KEY) || '{}'); }
@@ -122,6 +157,7 @@ function writeQty(id, value){
   localStorage.setItem(id, el.value);
 }
 function stepQty(id, delta){
+  playSoftTick();
   writeQty(id, readQty(id) + delta);
   updateTotals();
 }

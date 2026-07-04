@@ -1,11 +1,10 @@
-BT Block Order v2 - v9.6 Instant Search
+BT Block Order v2 - v9.7 Soft Tick
 
-Changes:
-- Replaces the top Clear All button with Search.
-- Adds live instant filtering by block code, name, series and dimensions.
-- Adds clear search button and search result count.
-- Keeps bottom Clear All button.
-- Keeps v9.5 Job Details and fixed quantity panel.
+Change:
+- Adds a soft tick sound when the + and − quantity buttons are pressed.
+- Keeps the v9.6 instant search feature.
+- Keeps the fixed quantity panel layout.
+- No layout changes.
 
 Commit summary:
-v9.6 instant search
+v9.7 soft tick

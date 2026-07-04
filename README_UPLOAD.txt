@@ -1,5 +1,5 @@
-BT Block Order v2 - v9.6 Instant Search Upload Notes
+BT Block Order v2 - v9.7 Soft Tick Upload Notes
 
-Upload all files in this ZIP over the top of the existing bt-block-order-v2 repository files.
-Commit summary: v9.6 instant search
-Then push origin and press Update in the app.
+Upload all files over the existing repository files.
+Commit summary: v9.7 soft tick
+After push, open the app and press Update if needed.
