@@ -1,4 +1,4 @@
-const CACHE = 'bt-block-order-v2-v9-2-6-qty-panel-rebuild';
+const CACHE = 'bt-block-order-v2-v9-3-css-cleanup';
 
 self.addEventListener('install', event => {
   self.skipWaiting();
