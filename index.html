@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="icon-yellow-512.png">
 <meta name="theme-color" content="#f5c400">
 
-<link rel="stylesheet" href="styles.css?v=9.7">
+<link rel="stylesheet" href="styles.css?v=9.8">
 </head>
 <body>
 <header>
@@ -32,6 +32,30 @@
   </div>
 
   <div class="star-note">Tap ★ to mark common blocks. Gold stars stay at the top.</div>
+  <button class="settings-toggle" onclick="toggleSettingsPanel()" type="button">
+    <span>⚙ Settings</span>
+    <span id="settingsArrow">▼</span>
+  </button>
+  <div class="settings-panel collapsed" id="settingsPanel">
+    <div class="settings-section-title">Feedback</div>
+    <label class="settings-row">
+      <span><strong>Button sounds</strong><em>Soft tick on + and − buttons</em></span>
+      <input id="prefSounds" type="checkbox" onchange="savePreferences()">
+    </label>
+    <label class="settings-row">
+      <span><strong>Vibration</strong><em>Tiny phone vibration where supported</em></span>
+      <input id="prefVibration" type="checkbox" onchange="savePreferences()">
+    </label>
+    <div class="settings-section-title">Safety</div>
+    <label class="settings-row">
+      <span><strong>Confirm Clear All</strong><em>Ask before removing all quantities</em></span>
+      <input id="prefConfirmClear" type="checkbox" onchange="savePreferences()">
+    </label>
+    <div class="settings-about">
+      <strong>BT Block Order v9.8</strong>
+      <span>Settings & Preferences</span>
+    </div>
+  </div>
   <button class="job-toggle" onclick="toggleJobPanel()" type="button">
     <span>📂 Job</span>
     <span id="jobArrow">▼</span>
@@ -107,9 +131,9 @@
 </header>
 <main id="list"></main>
 <div class="small">Product details taken from the supplied South Queensland Besser Block & Brick Guide, March 2026. Series: 100mm, 150mm, 200mm, 300mm and Capping.</div>
-<div class="small">BT Block Order v2 · Version 9.7</div>
+<div class="small">BT Block Order v2 · Version 9.8</div>
 <div class="update-banner" id="updateBanner">Update available <button onclick="applyUpdate()">Update now</button></div>
-<div class="dev-badge">V9.7 · SOFT TICK</div>
+<div class="dev-badge">V9.8 · SETTINGS</div>
 <div class="footer"><div class="total-box" aria-live="polite"><div class="total-label">TOTAL PALLETS TO ORDER</div><div class="total-value" id="orderTotal">0 pallets</div></div><button class="summary-btn" onclick="showMaterialsSummary()">Summary</button><button class="clear" onclick="clearAll()">Clear All</button></div>
 <div class="summary-modal" id="summaryModal" onclick="if(event.target===this) closeMaterialsSummary()">
   <div class="summary-card" role="dialog" aria-modal="true" aria-labelledby="summaryTitle">
@@ -124,10 +148,10 @@
     </div>
   </div>
 </div>
-<script src="blocks.js?v=9.7"></script>
-<script src="app.js?v=9.7"></script>
-<script src="summary.js?v=9.7"></script>
-<script src="jobs.js?v=9.7"></script>
-<script src="updates.js?v=9.7"></script>
+<script src="blocks.js?v=9.8"></script>
+<script src="app.js?v=9.8"></script>
+<script src="summary.js?v=9.8"></script>
+<script src="jobs.js?v=9.8"></script>
+<script src="updates.js?v=9.8"></script>
 </body>
 </html>

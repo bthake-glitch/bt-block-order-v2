@@ -1491,3 +1491,95 @@ main{padding-top:7px;}
   #blockSearch{font-size:13px;}
   .search-status{font-size:9px;}
 }
+
+
+/* v9.8 settings and preferences */
+.settings-toggle{
+  width:100%;
+  margin-top:4px;
+  padding:5px 8px;
+  border-width:2px;
+  border-radius:9px;
+  background:#fff;
+  color:#111;
+  font-size:13px;
+  font-weight:900;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  min-height:32px;
+  box-shadow:0 1px 2px #0002;
+}
+.settings-panel{
+  background:#fff;
+  border:2px solid #111;
+  border-radius:10px;
+  padding:7px;
+  margin-top:5px;
+  box-shadow:0 1px 3px #0002;
+}
+.settings-panel.collapsed{display:none;}
+.settings-section-title{
+  background:#111;
+  color:#ffea00;
+  border-radius:8px;
+  padding:5px 7px;
+  margin:0 0 6px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+}
+.settings-section-title:not(:first-child){margin-top:8px;}
+.settings-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 52px;
+  gap:8px;
+  align-items:center;
+  background:#fafafa;
+  border:1px solid #ddd;
+  border-radius:9px;
+  padding:7px 8px;
+  margin-bottom:6px;
+}
+.settings-row strong{
+  display:block;
+  font-size:12px;
+  line-height:1.1;
+  font-weight:900;
+  color:#111;
+}
+.settings-row em{
+  display:block;
+  margin-top:2px;
+  font-size:10px;
+  line-height:1.15;
+  font-style:normal;
+  font-weight:800;
+  color:#555;
+}
+.settings-row input[type=checkbox]{
+  justify-self:end;
+  width:34px;
+  height:34px;
+  accent-color:#f5c400;
+}
+.settings-about{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  border:2px solid #111;
+  background:#ffea00;
+  border-radius:9px;
+  padding:7px 8px;
+  margin-top:7px;
+  font-weight:900;
+}
+.settings-about strong{font-size:12px;color:#111;}
+.settings-about span{font-size:10px;color:#333;text-transform:uppercase;letter-spacing:.3px;}
+@media(min-width:820px){
+  .settings-panel{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start;}
+  .settings-panel.collapsed{display:none;}
+  .settings-section-title,.settings-about{grid-column:1 / -1;}
+}

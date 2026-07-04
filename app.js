@@ -2,11 +2,51 @@ let currentSeries = localStorage.getItem('bt_block_order_current_series') || '20
 let currentSearch = localStorage.getItem('bt_block_order_search') || '';
 const list = document.getElementById('list');
 
+/* v9.8 settings and preferences */
+const PREFS_KEY = 'bt_block_order_prefs_v1';
+const DEFAULT_PREFS = { sounds: true, vibration: false, confirmClear: true };
+let btPrefs = getPreferences();
 
-/* v9.7 soft tick feedback for quantity buttons */
+function getPreferences(){
+  try{ return Object.assign({}, DEFAULT_PREFS, JSON.parse(localStorage.getItem(PREFS_KEY) || '{}')); }
+  catch(e){ return Object.assign({}, DEFAULT_PREFS); }
+}
+
+function setPrefControl(id, checked){
+  const el = document.getElementById(id);
+  if(el) el.checked = !!checked;
+}
+
+function syncPreferenceControls(){
+  btPrefs = getPreferences();
+  setPrefControl('prefSounds', btPrefs.sounds);
+  setPrefControl('prefVibration', btPrefs.vibration);
+  setPrefControl('prefConfirmClear', btPrefs.confirmClear);
+}
+
+function savePreferences(){
+  btPrefs = {
+    sounds: !!document.getElementById('prefSounds')?.checked,
+    vibration: !!document.getElementById('prefVibration')?.checked,
+    confirmClear: !!document.getElementById('prefConfirmClear')?.checked
+  };
+  localStorage.setItem(PREFS_KEY, JSON.stringify(btPrefs));
+}
+
+function toggleSettingsPanel(){
+  const panel=document.getElementById('settingsPanel');
+  const arrow=document.getElementById('settingsArrow');
+  if(!panel) return;
+  syncPreferenceControls();
+  const collapsed=panel.classList.toggle('collapsed');
+  if(arrow) arrow.textContent = collapsed ? '▼' : '▲';
+}
+
 let btAudioContext = null;
 let btLastTickAt = 0;
 function playSoftTick(){
+  btPrefs = getPreferences();
+  if(!btPrefs.sounds) return;
   try{
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     if(!AudioContextClass) return;
@@ -34,6 +74,11 @@ function playSoftTick(){
     osc.start(t);
     osc.stop(t + 0.045);
   }catch(e){}
+}
+
+function doHapticTick(){
+  btPrefs = getPreferences();
+  try{ if(btPrefs.vibration && navigator.vibrate) navigator.vibrate(10); }catch(e){}
 }
 
 
@@ -158,6 +203,7 @@ function writeQty(id, value){
 }
 function stepQty(id, delta){
   playSoftTick();
+  doHapticTick();
   writeQty(id, readQty(id) + delta);
   updateTotals();
 }
@@ -220,6 +266,7 @@ function renderBlocks(){
 
 renderBlocks();
 updateTotals();
+syncPreferenceControls();
 
 async function copyOrder(){
   const text = typeof getShareSummaryText === 'function' ? getShareSummaryText() : '';
@@ -233,7 +280,8 @@ async function copyOrder(){
 }
 
 function clearAll(){
-  if(!confirm('Clear all On Site and Order quantities?')) return;
+  btPrefs = getPreferences();
+  if(btPrefs.confirmClear && !confirm('Clear all On Site and Order quantities?')) return;
   for(const b of blocks){
     for(const t of ['on','order']){
       const id = sid(b.code,t);

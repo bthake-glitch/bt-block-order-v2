@@ -1,5 +1,3 @@
-BT Block Order v2 - v9.7 Soft Tick Upload Notes
-
-Upload all files over the existing repository files.
-Commit summary: v9.7 soft tick
-After push, open the app and press Update if needed.
+Upload all files to bt-block-order-v2, replacing the existing files.
+Commit as: v9.8 Settings & Preferences
+Push origin, then press Update in the app.
