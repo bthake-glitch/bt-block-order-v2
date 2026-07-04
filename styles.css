@@ -1279,3 +1279,143 @@ main{overflow:hidden;}
   .card .qty-step{height:32px !important;min-height:32px !important;max-height:32px !important;font-size:23px !important;}
   .card .qty-wrap input{font-size:32px !important;}
 }
+
+/* v9.2.4 real quantity panel fix - final override
+   Goal: title, PALLETS label, number input, and +/- buttons each have their own space. */
+@media(max-width:819px){
+  :root{--card-body-h:96px !important;}
+}
+@media(min-width:820px){
+  :root{--card-body-h:124px !important;}
+}
+
+.card .body{
+  height:var(--card-body-h) !important;
+  min-height:var(--card-body-h) !important;
+  overflow:hidden !important;
+}
+.card .fields{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  gap:7px !important;
+  padding:6px 7px !important;
+  align-items:stretch !important;
+  overflow:hidden !important;
+}
+.card .fields > label{
+  display:grid !important;
+  grid-template-rows:26px minmax(0,1fr) !important;
+  gap:4px !important;
+  height:100% !important;
+  min-height:0 !important;
+  min-width:0 !important;
+  padding:4px !important;
+  overflow:hidden !important;
+  align-items:stretch !important;
+  justify-content:stretch !important;
+  text-align:center !important;
+  line-height:1 !important;
+  box-sizing:border-box !important;
+}
+.card .qty-title{
+  grid-row:1 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:0 !important;
+  height:26px !important;
+  overflow:hidden !important;
+  font-size:10px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  letter-spacing:.2px !important;
+  white-space:nowrap !important;
+}
+.card .qty-label-unit{
+  display:block !important;
+  margin:2px 0 0 !important;
+  padding:0 !important;
+  font-size:8px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  letter-spacing:.3px !important;
+  color:inherit !important;
+  opacity:.9 !important;
+  white-space:nowrap !important;
+}
+.card .qty-wrap{
+  grid-row:2 !important;
+  width:100% !important;
+  height:100% !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  grid-template-rows:30px 24px !important;
+  gap:4px !important;
+  padding:0 !important;
+  margin:0 !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+}
+.card .qty-wrap input{
+  grid-column:1 / 3 !important;
+  grid-row:1 !important;
+  width:100% !important;
+  height:30px !important;
+  min-height:30px !important;
+  max-height:30px !important;
+  margin:0 !important;
+  padding:0 4px !important;
+  border-width:2px !important;
+  border-radius:8px !important;
+  font-size:24px !important;
+  font-weight:900 !important;
+  line-height:30px !important;
+  text-align:center !important;
+  box-sizing:border-box !important;
+  display:block !important;
+  background:#fff !important;
+}
+.card .qty-step{
+  width:100% !important;
+  min-width:0 !important;
+  height:24px !important;
+  min-height:24px !important;
+  max-height:24px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border-width:2px !important;
+  border-radius:8px !important;
+  font-size:19px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+}
+.card .qty-step:first-of-type{grid-column:1 !important;grid-row:2 !important;}
+.card .qty-step:last-of-type{grid-column:2 !important;grid-row:2 !important;}
+
+@media(max-width:420px){
+  .card .fields{gap:6px !important;padding:6px 6px !important;}
+  .card .fields > label{grid-template-rows:26px minmax(0,1fr) !important;gap:4px !important;padding:4px !important;}
+  .card .qty-title{height:26px !important;font-size:10px !important;line-height:1 !important;}
+  .card .qty-label-unit{font-size:8px !important;margin-top:2px !important;}
+  .card .qty-wrap{grid-template-rows:30px 24px !important;gap:4px !important;}
+  .card .qty-wrap input{height:30px !important;min-height:30px !important;max-height:30px !important;font-size:24px !important;line-height:30px !important;}
+  .card .qty-step{height:24px !important;min-height:24px !important;max-height:24px !important;font-size:19px !important;}
+}
+
+@media(min-width:820px){
+  .card .fields{gap:9px !important;padding:8px 9px !important;}
+  .card .fields > label{grid-template-rows:32px minmax(0,1fr) !important;gap:6px !important;padding:6px !important;}
+  .card .qty-title{height:32px !important;font-size:12px !important;}
+  .card .qty-label-unit{font-size:9px !important;margin-top:3px !important;}
+  .card .qty-wrap{grid-template-rows:42px 32px !important;gap:6px !important;}
+  .card .qty-wrap input{height:42px !important;min-height:42px !important;max-height:42px !important;font-size:32px !important;line-height:42px !important;}
+  .card .qty-step{height:32px !important;min-height:32px !important;max-height:32px !important;font-size:23px !important;}
+}
