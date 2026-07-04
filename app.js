@@ -1,4 +1,5 @@
 let currentSeries = localStorage.getItem('bt_block_order_current_series') || '200';
+let currentSearch = localStorage.getItem('bt_block_order_search') || '';
 const list = document.getElementById('list');
 
 const FAV_KEY = 'bt_block_order_favourites_v1';
@@ -14,6 +15,70 @@ function toggleFav(code){
   else favs[code] = true;
   setFavs(favs);
   renderBlocks();
+}
+
+function toggleSearchPanel(){
+  const panel = document.getElementById('searchPanel');
+  const input = document.getElementById('blockSearch');
+  if(!panel) return;
+  const collapsed = panel.classList.toggle('collapsed');
+  if(!collapsed && input){
+    input.value = currentSearch;
+    setTimeout(() => input.focus(), 50);
+  }
+}
+
+function normaliseSearch(value){
+  return String(value || '').toLowerCase().replace(/[×x]/g, 'x').replace(/\s+/g, ' ').trim();
+}
+
+function getBlockSearchText(block){
+  const seriesLabel = (typeof SERIES_LABELS !== 'undefined' && SERIES_LABELS[block.series]) ? SERIES_LABELS[block.series] : (block.series || '');
+  const dim = block.dim || DIMENSIONS_BY_CODE[block.code] || '';
+  return normaliseSearch([
+    block.code,
+    block.name,
+    block.series,
+    seriesLabel,
+    dim,
+    String(seriesLabel).replace(' Series','mm').replace(' SERIES','mm'),
+    String(dim).replace(/\s+/g,'')
+  ].join(' '));
+}
+
+function blockMatchesSearch(block, query){
+  const q = normaliseSearch(query);
+  if(!q) return true;
+  return q.split(' ').every(part => getBlockSearchText(block).includes(part));
+}
+
+function setBlockSearch(value){
+  currentSearch = String(value || '');
+  localStorage.setItem('bt_block_order_search', currentSearch);
+  renderBlocks();
+}
+
+function clearBlockSearch(){
+  currentSearch = '';
+  localStorage.removeItem('bt_block_order_search');
+  const input = document.getElementById('blockSearch');
+  if(input){
+    input.value = '';
+    input.focus();
+  }
+  renderBlocks();
+}
+
+function updateSearchUi(matchCount, totalCount){
+  const input = document.getElementById('blockSearch');
+  const panel = document.getElementById('searchPanel');
+  const status = document.getElementById('searchStatus');
+  if(input && input.value !== currentSearch) input.value = currentSearch;
+  if(panel && currentSearch) panel.classList.remove('collapsed');
+  if(status){
+    if(currentSearch.trim()) status.textContent = 'Showing ' + matchCount + ' of ' + totalCount + ' blocks';
+    else status.textContent = 'Search by code, name, series or dimensions';
+  }
 }
 
 const DIMENSIONS_BY_CODE = {
@@ -79,11 +144,25 @@ function renderBlocks(){
   if(!list) return;
   list.innerHTML = '';
   document.querySelectorAll('.series-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.series === currentSeries));
-  const visibleBlocks = blocks.filter(b => currentSeries === 'All' || b.series === currentSeries);
+  const baseBlocks = currentSearch.trim() ? blocks : blocks.filter(b => currentSeries === 'All' || b.series === currentSeries);
+  const visibleBlocks = baseBlocks.filter(b => blockMatchesSearch(b, currentSearch));
+  updateSearchUi(visibleBlocks.length, baseBlocks.length);
   const title = document.createElement('div');
   title.className = 'series-title';
-  title.textContent = (typeof SERIES_LABELS !== 'undefined' && SERIES_LABELS[currentSeries]) ? SERIES_LABELS[currentSeries] : 'Block Series';
+  if(currentSearch.trim()){
+    title.textContent = 'Search Results';
+  }else{
+    title.textContent = (typeof SERIES_LABELS !== 'undefined' && SERIES_LABELS[currentSeries]) ? SERIES_LABELS[currentSeries] : 'Block Series';
+  }
   list.appendChild(title);
+
+  if(!visibleBlocks.length){
+    const empty = document.createElement('div');
+    empty.className = 'search-empty';
+    empty.textContent = 'No blocks found. Try a code, block name, series or dimension.';
+    list.appendChild(empty);
+    return;
+  }
 
   for(const b of [...visibleBlocks].sort((a,b)=>(isFav(b.code)-isFav(a.code)))){
     const on = sid(b.code,'on');

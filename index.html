@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="icon-yellow-512.png">
 <meta name="theme-color" content="#f5c400">
 
-<link rel="stylesheet" href="styles.css?v=9.5">
+<link rel="stylesheet" href="styles.css?v=9.6">
 </head>
 <body>
 <header>
@@ -21,7 +21,15 @@
       <div class="sub">Concrete Masonry Unit Pallet Ordering</div>
     </div>
   </div>
-  <div class="actions"><button class="primary" onclick="copyOrder()">Copy Order</button><button onclick="checkForUpdate()">Update</button><button class="clear" onclick="clearAll()">Clear All</button></div>
+  <div class="actions"><button class="primary" onclick="copyOrder()">Copy Order</button><button class="search-action" onclick="toggleSearchPanel()" type="button">🔍 Search</button><button onclick="checkForUpdate()">Update</button></div>
+  <div class="search-panel collapsed" id="searchPanel" role="search">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input id="blockSearch" type="search" placeholder="Search code, name, series or size..." oninput="setBlockSearch(this.value)" autocomplete="off">
+      <button class="search-clear" onclick="clearBlockSearch()" type="button" aria-label="Clear search">✖</button>
+    </div>
+    <div class="search-status" id="searchStatus">Search by code, name, series or dimensions</div>
+  </div>
 
   <div class="star-note">Tap ★ to mark common blocks. Gold stars stay at the top.</div>
   <button class="job-toggle" onclick="toggleJobPanel()" type="button">
@@ -99,9 +107,9 @@
 </header>
 <main id="list"></main>
 <div class="small">Product details taken from the supplied South Queensland Besser Block & Brick Guide, March 2026. Series: 100mm, 150mm, 200mm, 300mm and Capping.</div>
-<div class="small">BT Block Order v2 · Version 9.5</div>
+<div class="small">BT Block Order v2 · Version 9.6</div>
 <div class="update-banner" id="updateBanner">Update available <button onclick="applyUpdate()">Update now</button></div>
-<div class="dev-badge">V9.5 · JOB DETAILS</div>
+<div class="dev-badge">V9.6 · INSTANT SEARCH</div>
 <div class="footer"><div class="total-box" aria-live="polite"><div class="total-label">TOTAL PALLETS TO ORDER</div><div class="total-value" id="orderTotal">0 pallets</div></div><button class="summary-btn" onclick="showMaterialsSummary()">Summary</button><button class="clear" onclick="clearAll()">Clear All</button></div>
 <div class="summary-modal" id="summaryModal" onclick="if(event.target===this) closeMaterialsSummary()">
   <div class="summary-card" role="dialog" aria-modal="true" aria-labelledby="summaryTitle">
@@ -116,10 +124,10 @@
     </div>
   </div>
 </div>
-<script src="blocks.js?v=9.5"></script>
-<script src="app.js?v=9.5"></script>
-<script src="summary.js?v=9.5"></script>
-<script src="jobs.js?v=9.5"></script>
-<script src="updates.js?v=9.5"></script>
+<script src="blocks.js?v=9.6"></script>
+<script src="app.js?v=9.6"></script>
+<script src="summary.js?v=9.6"></script>
+<script src="jobs.js?v=9.6"></script>
+<script src="updates.js?v=9.6"></script>
 </body>
 </html>

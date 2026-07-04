@@ -1,11 +1,11 @@
-BT Block Order v2 - v9.5 Job Details
+BT Block Order v2 - v9.6 Instant Search
 
-Change:
-- Adds builder, supervisor, purchase order and delivery details.
-- Adds supplier contact and delivery instructions.
-- Saved jobs now store the new fields.
-- Materials Summary, text, email and print outputs include the new job details.
-- Keeps the stable v9.4 look and the rebuilt quantity panel.
+Changes:
+- Replaces the top Clear All button with Search.
+- Adds live instant filtering by block code, name, series and dimensions.
+- Adds clear search button and search result count.
+- Keeps bottom Clear All button.
+- Keeps v9.5 Job Details and fixed quantity panel.
 
 Commit summary:
-v9.5 job details
+v9.6 instant search

@@ -1,4 +1,4 @@
-const CACHE = 'bt-block-order-v2-v9-5-job-details';
+const CACHE = 'bt-block-order-v2-v9-6-instant-search';
 
 self.addEventListener('install', event => {
   self.skipWaiting();
