@@ -1652,3 +1652,51 @@ main{padding-top:7px;}
     .card .qty-step{height:26px !important;min-height:26px !important;max-height:26px !important;}
   }
 }
+
+
+/* v9.8.2 iPhone Safari input rebuild
+   The visible quantity box is now a normal button, with the real value stored in a hidden input.
+   This avoids iPhone Safari rendering text inputs as coloured bars. */
+.card .qty-wrap input[type="hidden"]{
+  display:none !important;
+}
+.card .qty-display{
+  grid-column:1 / 3 !important;
+  grid-row:1 !important;
+  width:100% !important;
+  height:100% !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:0 4px !important;
+  box-sizing:border-box !important;
+  border-width:3px !important;
+  border-style:solid !important;
+  border-radius:10px !important;
+  background:#fff !important;
+  color:#111 !important;
+  -webkit-text-fill-color:#111 !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+  font-size:28px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  text-align:center !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.10) !important;
+  -webkit-appearance:none !important;
+  appearance:none !important;
+  overflow:hidden !important;
+}
+.on .qty-display{border-color:var(--blue) !important;}
+.order .qty-display{border-color:var(--red) !important;}
+.card .qty-display:focus{
+  outline:2px solid #ffea00 !important;
+  outline-offset:1px !important;
+}
+@media(max-width:420px){
+  .card .qty-display{font-size:26px !important;border-radius:9px !important;}
+}
+@media(min-width:820px){
+  .card .qty-display{font-size:34px !important;}
+}

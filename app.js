@@ -194,12 +194,31 @@ function palletWord(value){
   const n = parseInt(value || '0', 10) || 0;
   return n === 1 ? 'pallet' : 'pallets';
 }
+function syncQtyDisplay(id){
+  const el = document.getElementById(id);
+  document.querySelectorAll('[data-qty-for]').forEach(display => {
+    if(display.getAttribute('data-qty-for') === id){
+      display.textContent = el && el.value ? el.value : '';
+    }
+  });
+}
 function writeQty(id, value){
   const el = document.getElementById(id);
-  if(!el) return;
   const n = Math.max(0, parseInt(value || '0', 10) || 0);
-  el.value = String(n);
-  localStorage.setItem(id, el.value);
+  const text = n ? String(n) : '';
+  localStorage.setItem(id, text);
+  if(el) el.value = text;
+  syncQtyDisplay(id);
+}
+function editQty(id){
+  playSoftTick();
+  doHapticTick();
+  const current = readQty(id);
+  const response = prompt('Enter pallets:', current ? String(current) : '');
+  if(response === null) return;
+  const cleaned = String(response).replace(/[^0-9]/g, '');
+  writeQty(id, cleaned);
+  updateTotals();
 }
 function stepQty(id, delta){
   playSoftTick();
@@ -258,8 +277,8 @@ function renderBlocks(){
     const series = escAttr(b.series || '200');
     card.innerHTML = `<div class="head"><div class="code">${code}</div><div class="name"><button class="fav-star ${isFav(b.code) ? 'fav' : ''}" onclick="toggleFav('${code}')" type="button">★</button><span class="name-text">${name}</span></div></div>
       <div class="body"><div class="drawing series-${series}"><img src="${img}" alt="${code} ${name}"><div class="dim-big">${dim}</div></div>
-      <div class="fields"><label class="on"><div class="qty-title">ON SITE</div><div class="qty-wrap"><input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="${on}" value="${localStorage.getItem(on)||''}" oninput="localStorage.setItem('${on}',this.value);updateTotals()"><div class="qty-unit">PALLETS</div><button class="qty-step" type="button" onclick="stepQty('${on}',-1)">−</button><button class="qty-step" type="button" onclick="stepQty('${on}',1)">+</button></div></label>
-      <label class="order"><div class="qty-title">ORDER</div><div class="qty-wrap"><input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="${order}" value="${localStorage.getItem(order)||''}" oninput="localStorage.setItem('${order}',this.value);updateTotals()"><div class="qty-unit">PALLETS</div><button class="qty-step" type="button" onclick="stepQty('${order}',-1)">−</button><button class="qty-step" type="button" onclick="stepQty('${order}',1)">+</button></div></label></div></div>`;
+      <div class="fields"><label class="on"><div class="qty-title">ON SITE</div><div class="qty-wrap"><input type="hidden" id="${on}" value="${localStorage.getItem(on)||''}"><button class="qty-display" data-qty-for="${on}" type="button" onclick="editQty('${on}')">${localStorage.getItem(on)||''}</button><div class="qty-unit">PALLETS</div><button class="qty-step" type="button" onclick="stepQty('${on}',-1)">−</button><button class="qty-step" type="button" onclick="stepQty('${on}',1)">+</button></div></label>
+      <label class="order"><div class="qty-title">ORDER</div><div class="qty-wrap"><input type="hidden" id="${order}" value="${localStorage.getItem(order)||''}"><button class="qty-display" data-qty-for="${order}" type="button" onclick="editQty('${order}')">${localStorage.getItem(order)||''}</button><div class="qty-unit">PALLETS</div><button class="qty-step" type="button" onclick="stepQty('${order}',-1)">−</button><button class="qty-step" type="button" onclick="stepQty('${order}',1)">+</button></div></label></div></div>`;
     list.appendChild(card);
   }
 }
