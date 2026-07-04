@@ -1,4 +1,4 @@
-BT Block Order v2 - v9.1 Professional Polish
+BT Block Order v2 - v9.0 Professional Polish
 
 Change:
 - Cleaner BT branded header with app icon.
@@ -6,9 +6,9 @@ Change:
 - Better block card spacing, shadows, headings and alignment.
 - Professional Materials Summary / pallet order sheet layout.
 - Supplier phone and email now appear in the summary when entered.
-- Updated service worker cache and version files to v9.1.
+- Updated service worker cache and version files to v9.0.
 
 Upload/copy these files over your existing bt-block-order-v2 repo. This package includes app.js and blocks.js, so you can replace all files in one go.
 
 Commit summary:
-v9.1 professional polish
+v9.0 professional polish

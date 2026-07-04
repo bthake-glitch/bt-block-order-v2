@@ -1,4 +1,4 @@
-const CACHE = 'bt-block-order-v2-v9-1-pretty-polish';
+const CACHE = 'bt-block-order-v2-v9-2-border-cleanup';
 
 self.addEventListener('install', event => {
   self.skipWaiting();
