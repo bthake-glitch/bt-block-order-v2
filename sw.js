@@ -1,4 +1,4 @@
-const CACHE = 'bt-block-order-v2-v9-8-4-cross-platform-qty';
+const CACHE = 'bt-block-order-v2-v10-0-quantity-rebuild';
 
 self.addEventListener('install', event => {
   self.skipWaiting();

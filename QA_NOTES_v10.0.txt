@@ -1,0 +1,17 @@
+BT Block Order v10.0 QA Notes
+
+Checked:
+- app.js syntax: PASS
+- updates.js syntax: PASS
+- version.json set to 10.0: PASS
+- index asset cache-busting set to ?v=10.0: PASS
+- service worker cache renamed to v10.0: PASS
+- visible block quantity controls use buttons, not number/text inputs: PASS
+- hidden quantity inputs removed from rendered block cards: PASS
+- quantity values are read/written directly through JavaScript localStorage: PASS
+- plus/minus behaviour clamps at zero and updates totals: PASS
+- Clear All removes localStorage values and refreshes visible quantity displays: PASS
+
+Scope:
+- v10.0 changes only the quantity-control source implementation and version labels.
+- Existing search, settings, sounds, job details, summary and update files are preserved.

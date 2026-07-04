@@ -181,8 +181,7 @@ const DIMENSIONS_BY_CODE = {
 
 function sid(code,type){ return type + '_' + code.replace(/[^a-zA-Z0-9]/g,'_'); }
 function readQty(id){
-  const el = document.getElementById(id);
-  const raw = el ? el.value : localStorage.getItem(id);
+  const raw = localStorage.getItem(id);
   const n = parseInt(raw || '0', 10);
   return Number.isFinite(n) ? n : 0;
 }
@@ -195,19 +194,19 @@ function palletWord(value){
   return n === 1 ? 'pallet' : 'pallets';
 }
 function syncQtyDisplay(id){
-  const el = document.getElementById(id);
+  const text = localStorage.getItem(id) || '';
   document.querySelectorAll('[data-qty-for]').forEach(display => {
     if(display.getAttribute('data-qty-for') === id){
-      display.textContent = el && el.value ? el.value : '0';
+      display.textContent = text;
+      display.setAttribute('aria-label', text ? text + ' pallets' : 'No pallets entered');
     }
   });
 }
 function writeQty(id, value){
-  const el = document.getElementById(id);
   const n = Math.max(0, parseInt(value || '0', 10) || 0);
   const text = n ? String(n) : '';
-  localStorage.setItem(id, text);
-  if(el) el.value = text;
+  if(text) localStorage.setItem(id, text);
+  else localStorage.removeItem(id);
   syncQtyDisplay(id);
 }
 function editQty(id){
@@ -277,8 +276,8 @@ function renderBlocks(){
     const series = escAttr(b.series || '200');
     card.innerHTML = `<div class="head"><div class="code">${code}</div><div class="name"><button class="fav-star ${isFav(b.code) ? 'fav' : ''}" onclick="toggleFav('${code}')" type="button">★</button><span class="name-text">${name}</span></div></div>
       <div class="body"><div class="drawing series-${series}"><img src="${img}" alt="${code} ${name}"><div class="dim-big">${dim}</div></div>
-      <div class="fields"><div class="qty-panel on"><div class="qty-title">ON SITE</div><div class="qty-subtitle">PALLETS</div><input type="hidden" id="${on}" value="${localStorage.getItem(on)||''}"><div class="qty-control" role="group" aria-label="On site pallets"><button class="qty-step qty-minus" type="button" onclick="stepQty('${on}',-1)">−</button><button class="qty-value" data-qty-for="${on}" type="button" onclick="editQty('${on}')">${localStorage.getItem(on)||'0'}</button><button class="qty-step qty-plus" type="button" onclick="stepQty('${on}',1)">+</button></div></div>
-      <div class="qty-panel order"><div class="qty-title">ORDER</div><div class="qty-subtitle">PALLETS</div><input type="hidden" id="${order}" value="${localStorage.getItem(order)||''}"><div class="qty-control" role="group" aria-label="Order pallets"><button class="qty-step qty-minus" type="button" onclick="stepQty('${order}',-1)">−</button><button class="qty-value" data-qty-for="${order}" type="button" onclick="editQty('${order}')">${localStorage.getItem(order)||'0'}</button><button class="qty-step qty-plus" type="button" onclick="stepQty('${order}',1)">+</button></div></div></div></div>`;
+      <div class="fields"><label class="on"><div class="qty-title">ON SITE</div><div class="qty-wrap"><button class="qty-display" data-qty-for="${on}" type="button" aria-label="${localStorage.getItem(on) ? localStorage.getItem(on) + ' pallets' : 'No pallets entered'}" onclick="editQty('${on}')">${localStorage.getItem(on)||''}</button><div class="qty-unit">PALLETS</div><button class="qty-step" type="button" aria-label="Decrease on site pallets" onclick="stepQty('${on}',-1)">−</button><button class="qty-step" type="button" aria-label="Increase on site pallets" onclick="stepQty('${on}',1)">+</button></div></label>
+      <label class="order"><div class="qty-title">ORDER</div><div class="qty-wrap"><button class="qty-display" data-qty-for="${order}" type="button" aria-label="${localStorage.getItem(order) ? localStorage.getItem(order) + ' pallets' : 'No pallets entered'}" onclick="editQty('${order}')">${localStorage.getItem(order)||''}</button><div class="qty-unit">PALLETS</div><button class="qty-step" type="button" aria-label="Decrease order pallets" onclick="stepQty('${order}',-1)">−</button><button class="qty-step" type="button" aria-label="Increase order pallets" onclick="stepQty('${order}',1)">+</button></div></label></div></div>`;
     list.appendChild(card);
   }
 }
@@ -305,12 +304,8 @@ function clearAll(){
     for(const t of ['on','order']){
       const id = sid(b.code,t);
       localStorage.removeItem(id);
-      const el = document.getElementById(id);
-      if(el) el.value = '';
+      syncQtyDisplay(id);
     }
   }
-  document.querySelectorAll('[data-qty-for]').forEach(display => {
-    display.textContent = '0';
-  });
   updateTotals();
 }

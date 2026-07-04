@@ -1,10 +1,10 @@
-BT Block Order v2 - v9.8.4 Cross-Platform Quantity Rebuild
+BT Block Order v2 - v10.0 Cross-Platform Quantity Control Rebuild
 
 Change:
-- Rebuilt the visible quantity controls to avoid browser-styled number inputs.
-- Quantity value is displayed as normal app UI between minus and plus buttons.
-- Designed to render consistently on iPhone Safari, Android Chrome, Samsung Internet and desktop browsers.
-- Keeps settings, sounds, vibration, search, job details and summaries.
+- Completely rebuilt the quantity control to avoid browser number/text input rendering issues.
+- Quantity values are now controlled by JavaScript and stored directly in localStorage.
+- Removed hidden quantity inputs from the block cards.
+- Plus/minus buttons, tap-to-enter quantity, totals, summaries, settings, sounds and layout are preserved.
 
 Commit summary:
-v9.8.4 cross-platform quantity rebuild
+v10.0 cross-platform quantity control rebuild

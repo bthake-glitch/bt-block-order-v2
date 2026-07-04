@@ -1584,93 +1584,31 @@ main{padding-top:7px;}
   .settings-section-title,.settings-about{grid-column:1 / -1;}
 }
 
-/* v9.8.1 iPhone Safari quantity input fix
-   Safari can render nested grid text inputs as coloured bars when appearance/height
-   is inherited from older input styles. These final overrides force normal text
-   rendering while keeping the v9.8 layout unchanged. */
-.card .qty-wrap input,
-.card .qty-wrap input[type="text"]{
-  -webkit-appearance:none !important;
-  appearance:none !important;
-  display:block !important;
-  opacity:1 !important;
-  color:#111 !important;
-  -webkit-text-fill-color:#111 !important;
-  caret-color:#111 !important;
-  font-family:Arial,Helvetica,sans-serif !important;
-  font-weight:900 !important;
-  text-align:center !important;
-  vertical-align:middle !important;
-  background-color:#fff !important;
-  background-image:none !important;
-  box-shadow:inset 0 1px 3px rgba(0,0,0,.10) !important;
-  text-shadow:none !important;
-  transform:none !important;
-  -webkit-transform:none !important;
-  overflow:visible !important;
-}
-.card .qty-wrap input::-webkit-outer-spin-button,
-.card .qty-wrap input::-webkit-inner-spin-button{
-  -webkit-appearance:none !important;
-  margin:0 !important;
-}
-.card .qty-wrap input::placeholder{
-  color:transparent !important;
-  -webkit-text-fill-color:transparent !important;
-}
-@supports (-webkit-touch-callout:none){
-  .card .qty-wrap{
-    grid-template-rows:40px 28px !important;
-    align-content:start !important;
-  }
-  .card .qty-wrap input,
-  .card .qty-wrap input[type="text"]{
-    height:40px !important;
-    min-height:40px !important;
-    max-height:40px !important;
-    line-height:40px !important;
-    padding:0 4px !important;
-    font-size:28px !important;
-  }
-  .card .qty-step{
-    height:28px !important;
-    min-height:28px !important;
-    max-height:28px !important;
-  }
-}
-@media(max-width:420px){
-  @supports (-webkit-touch-callout:none){
-    .card .qty-wrap{grid-template-rows:38px 26px !important;gap:5px !important;}
-    .card .qty-wrap input,
-    .card .qty-wrap input[type="text"]{
-      height:38px !important;
-      min-height:38px !important;
-      max-height:38px !important;
-      line-height:38px !important;
-      font-size:26px !important;
-    }
-    .card .qty-step{height:26px !important;min-height:26px !important;max-height:26px !important;}
-  }
-}
-
-
-/* v9.8.2 iPhone Safari input rebuild
-   The visible quantity box is now a normal button, with the real value stored in a hidden input.
-   This avoids iPhone Safari rendering text inputs as coloured bars. */
-.card .qty-wrap input[type="hidden"]{
-  display:none !important;
+/* v10.0 cross-platform quantity control rebuild
+   Source behaviour: no visible quantity inputs and no hidden quantity inputs in cards.
+   JavaScript owns the value and writes directly to localStorage; the UI is button-based. */
+.card .qty-wrap{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  grid-template-rows:minmax(0,1fr) 26px !important;
+  gap:5px !important;
+  width:100% !important;
+  min-width:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
 }
 .card .qty-display{
   grid-column:1 / 3 !important;
   grid-row:1 !important;
   width:100% !important;
   height:100% !important;
+  min-width:0 !important;
   min-height:0 !important;
   margin:0 !important;
   padding:0 4px !important;
   box-sizing:border-box !important;
-  border-width:3px !important;
-  border-style:solid !important;
+  border:3px solid #111 !important;
   border-radius:10px !important;
   background:#fff !important;
   color:#111 !important;
@@ -1684,305 +1622,49 @@ main{padding-top:7px;}
   align-items:center !important;
   justify-content:center !important;
   box-shadow:inset 0 1px 3px rgba(0,0,0,.10) !important;
-  -webkit-appearance:none !important;
-  appearance:none !important;
-  overflow:hidden !important;
-}
-.on .qty-display{border-color:var(--blue) !important;}
-.order .qty-display{border-color:var(--red) !important;}
-.card .qty-display:focus{
-  outline:2px solid #ffea00 !important;
-  outline-offset:1px !important;
-}
-@media(max-width:420px){
-  .card .qty-display{font-size:26px !important;border-radius:9px !important;}
-}
-@media(min-width:820px){
-  .card .qty-display{font-size:34px !important;}
-}
-
-/* v9.8.3 iPhone quantity panel rebuild
-   Replaces label-based quantity panels with normal div panels and button display boxes.
-   This avoids iPhone Safari clipping the input/display area. */
-.card .fields{
-  display:grid !important;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
-  gap:8px !important;
-  padding:7px 8px !important;
-  align-items:stretch !important;
-  overflow:hidden !important;
-}
-.card .qty-panel{
-  min-width:0 !important;
-  height:100% !important;
-  box-sizing:border-box !important;
-  padding:6px 8px 7px !important;
-  border:2px solid #e6e6e6 !important;
-  border-radius:18px !important;
-  background:#fafafa !important;
-  display:grid !important;
-  grid-template-rows:28px minmax(0,1fr) !important;
-  gap:4px !important;
-  overflow:hidden !important;
-}
-.card .qty-panel.on{background:linear-gradient(180deg,#ffffff,#f6faff) !important;}
-.card .qty-panel.order{background:linear-gradient(180deg,#ffffff,#fff7f7) !important;}
-.card .qty-panel .qty-title{
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  justify-content:center !important;
-  height:28px !important;
-  min-height:28px !important;
-  max-height:28px !important;
-  font-size:13px !important;
-  line-height:1 !important;
-  font-weight:900 !important;
-  letter-spacing:.2px !important;
-  text-align:center !important;
-  overflow:hidden !important;
-}
-.card .qty-panel .qty-title::after{
-  content:"PALLETS" !important;
-  display:block !important;
-  margin-top:2px !important;
-  font-size:9px !important;
-  line-height:1 !important;
-  font-weight:900 !important;
-  letter-spacing:.15px !important;
-  opacity:.9 !important;
-}
-.card .qty-panel .qty-unit,
-.card .qty-panel input[type="hidden"]{
-  display:none !important;
-}
-.card .qty-panel .qty-wrap{
-  width:100% !important;
-  height:100% !important;
-  min-width:0 !important;
-  min-height:0 !important;
-  display:grid !important;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
-  grid-template-rows:minmax(0,1fr) 28px !important;
-  gap:5px !important;
-  padding:0 !important;
-  overflow:hidden !important;
-  align-content:stretch !important;
-}
-.card .qty-panel .qty-display{
-  grid-column:1 / 3 !important;
-  grid-row:1 !important;
-  width:100% !important;
-  height:100% !important;
-  min-height:32px !important;
-  box-sizing:border-box !important;
-  margin:0 !important;
-  padding:0 4px !important;
-  border:3px solid currentColor !important;
-  border-radius:10px !important;
-  background:#fff !important;
-  color:#111 !important;
-  -webkit-text-fill-color:#111 !important;
-  font:900 28px/1 Arial,Helvetica,sans-serif !important;
-  text-align:center !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
   appearance:none !important;
   -webkit-appearance:none !important;
-  box-shadow:inset 0 1px 3px rgba(0,0,0,.10) !important;
+  user-select:none !important;
+  -webkit-user-select:none !important;
+  touch-action:manipulation !important;
+  cursor:pointer !important;
   overflow:hidden !important;
 }
-.card .qty-panel.on .qty-display{border-color:var(--blue) !important;}
-.card .qty-panel.order .qty-display{border-color:var(--red) !important;}
-.card .qty-panel .qty-step{
+.card .qty-step{
   width:100% !important;
-  height:28px !important;
-  min-height:28px !important;
-  max-height:28px !important;
-  box-sizing:border-box !important;
-  margin:0 !important;
-  padding:0 !important;
-  border:3px solid currentColor !important;
-  border-radius:10px !important;
-  background:#fff !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  font:900 22px/1 Arial,Helvetica,sans-serif !important;
-  appearance:none !important;
-  -webkit-appearance:none !important;
-  box-shadow:0 1px 3px rgba(0,0,0,.14) !important;
-  transform:none;
-}
-.card .qty-panel .qty-minus{grid-column:1 !important;grid-row:2 !important;}
-.card .qty-panel .qty-plus{grid-column:2 !important;grid-row:2 !important;}
-.card .qty-panel.on .qty-step{color:var(--blue) !important;border-color:var(--blue) !important;}
-.card .qty-panel.order .qty-step{color:var(--red) !important;border-color:var(--red) !important;}
-@media(max-width:430px){
-  :root{--card-body-h:132px !important;}
-  .card .body{height:132px !important;grid-template-columns:29% minmax(0,71%) !important;}
-  .card .fields{gap:7px !important;padding:6px 7px !important;}
-  .card .qty-panel{padding:6px 7px 7px !important;grid-template-rows:28px minmax(0,1fr) !important;gap:4px !important;border-radius:16px !important;}
-  .card .qty-panel .qty-title{height:28px !important;min-height:28px !important;max-height:28px !important;font-size:12px !important;}
-  .card .qty-panel .qty-title::after{font-size:8px !important;margin-top:2px !important;}
-  .card .qty-panel .qty-wrap{grid-template-rows:minmax(0,1fr) 28px !important;gap:5px !important;}
-  .card .qty-panel .qty-display{min-height:34px !important;font-size:26px !important;border-radius:9px !important;}
-  .card .qty-panel .qty-step{height:28px !important;min-height:28px !important;max-height:28px !important;font-size:21px !important;border-radius:9px !important;}
-}
-@media(min-width:820px){
-  :root{--card-body-h:132px !important;}
-  .card .body{height:132px !important;}
-  .card .fields{gap:10px !important;padding:10px !important;}
-  .card .qty-panel{grid-template-rows:32px minmax(0,1fr) !important;gap:7px !important;padding:8px 10px !important;}
-  .card .qty-panel .qty-title{height:32px !important;min-height:32px !important;max-height:32px !important;font-size:14px !important;}
-  .card .qty-panel .qty-title::after{font-size:10px !important;}
-  .card .qty-panel .qty-wrap{grid-template-rows:minmax(0,1fr) 34px !important;gap:7px !important;}
-  .card .qty-panel .qty-display{font-size:34px !important;}
-  .card .qty-panel .qty-step{height:34px !important;min-height:34px !important;max-height:34px !important;font-size:25px !important;}
-}
-
-/* v9.8.4 cross-platform quantity rebuild
-   The visible quantity is no longer a browser-styled input.
-   It is a normal button/text value between minus and plus buttons so it renders
-   the same on iPhone Safari, Android Chrome, Samsung Internet and desktop. */
-.card .fields{
-  display:grid !important;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
-  gap:8px !important;
-  padding:7px 8px !important;
-  align-items:stretch !important;
-  overflow:hidden !important;
-}
-.card .qty-panel{
   min-width:0 !important;
-  height:100% !important;
+  height:26px !important;
+  min-height:26px !important;
+  max-height:26px !important;
   box-sizing:border-box !important;
-  padding:7px 8px !important;
-  border:2px solid #e6e6e6 !important;
-  border-radius:18px !important;
-  background:#fafafa !important;
-  display:grid !important;
-  grid-template-rows:auto auto minmax(0,1fr) !important;
-  gap:2px !important;
-  align-items:stretch !important;
-  overflow:hidden !important;
-}
-.card .qty-panel.on{background:linear-gradient(180deg,#ffffff,#f6faff) !important;}
-.card .qty-panel.order{background:linear-gradient(180deg,#ffffff,#fff7f7) !important;}
-.card .qty-title{
-  height:auto !important;
-  min-height:0 !important;
-  max-height:none !important;
-  display:block !important;
-  text-align:center !important;
-  font:900 13px/1 Arial,Helvetica,sans-serif !important;
-  letter-spacing:.25px !important;
-  margin:0 !important;
-  padding:0 !important;
-}
-.card .qty-title::after{content:none !important;display:none !important;}
-.card .qty-subtitle{
-  display:block !important;
-  text-align:center !important;
-  font:900 9px/1 Arial,Helvetica,sans-serif !important;
-  letter-spacing:.2px !important;
-  margin:1px 0 4px !important;
-  padding:0 !important;
-  opacity:.9 !important;
-}
-.card .qty-panel.on .qty-title,
-.card .qty-panel.on .qty-subtitle{color:var(--blue) !important;}
-.card .qty-panel.order .qty-title,
-.card .qty-panel.order .qty-subtitle{color:var(--red) !important;}
-.card .qty-panel input[type="hidden"]{display:none !important;}
-.card .qty-control{
-  width:100% !important;
-  height:42px !important;
-  min-height:42px !important;
-  max-height:42px !important;
-  align-self:center !important;
-  box-sizing:border-box !important;
-  display:grid !important;
-  grid-template-columns:34px minmax(0,1fr) 34px !important;
-  gap:0 !important;
-  border:3px solid currentColor !important;
-  border-radius:12px !important;
+  border:3px solid #111 !important;
+  border-radius:9px !important;
   background:#fff !important;
-  overflow:hidden !important;
-  box-shadow:inset 0 1px 3px rgba(0,0,0,.10) !important;
-}
-.card .qty-panel.on .qty-control{color:var(--blue) !important;}
-.card .qty-panel.order .qty-control{color:var(--red) !important;}
-.card .qty-control .qty-step,
-.card .qty-control .qty-value{
-  position:static !important;
-  width:100% !important;
-  height:100% !important;
-  min-width:0 !important;
-  min-height:0 !important;
-  max-height:none !important;
-  box-sizing:border-box !important;
-  margin:0 !important;
-  padding:0 !important;
-  border:0 !important;
-  border-radius:0 !important;
-  background:#fff !important;
-  color:#111 !important;
-  -webkit-text-fill-color:#111 !important;
-  font-family:Arial,Helvetica,sans-serif !important;
+  font-size:21px !important;
   font-weight:900 !important;
   line-height:1 !important;
-  text-align:center !important;
+  padding:0 !important;
+  margin:0 !important;
   display:flex !important;
   align-items:center !important;
   justify-content:center !important;
   appearance:none !important;
   -webkit-appearance:none !important;
-  box-shadow:none !important;
-  overflow:hidden !important;
-  transform:none !important;
   touch-action:manipulation !important;
 }
-.card .qty-control .qty-step{
-  font-size:24px !important;
-  color:currentColor !important;
-  -webkit-text-fill-color:currentColor !important;
-}
-.card .qty-control .qty-value{
-  font-size:28px !important;
-  border-left:1px solid #ddd !important;
-  border-right:1px solid #ddd !important;
-  color:#111 !important;
-}
-.card .qty-control .qty-step:active,
-.card .qty-control .qty-value:active{background:#f3f3f3 !important;}
-.card .qty-display,
-.card .qty-wrap,
-.card .qty-unit{display:none !important;}
-@media(max-width:430px){
-  :root{--card-body-h:112px !important;}
-  .card .body{height:112px !important;grid-template-columns:29% minmax(0,71%) !important;}
-  .card .fields{gap:7px !important;padding:6px 7px !important;}
-  .card .qty-panel{padding:7px 7px !important;border-radius:16px !important;gap:1px !important;}
-  .card .qty-title{font-size:12px !important;}
-  .card .qty-subtitle{font-size:8px !important;margin-bottom:4px !important;}
-  .card .qty-control{height:39px !important;min-height:39px !important;max-height:39px !important;grid-template-columns:31px minmax(0,1fr) 31px !important;border-radius:10px !important;}
-  .card .qty-control .qty-step{font-size:22px !important;}
-  .card .qty-control .qty-value{font-size:26px !important;}
+.card .qty-step:first-of-type{grid-column:1 !important;grid-row:2 !important;}
+.card .qty-step:last-of-type{grid-column:2 !important;grid-row:2 !important;}
+.on .qty-display,.on .qty-step{border-color:var(--blue) !important;color:var(--blue) !important;}
+.order .qty-display,.order .qty-step{border-color:var(--red) !important;color:var(--red) !important;}
+.on .qty-display,.order .qty-display{color:#111 !important;}
+.card .qty-display:focus,.card .qty-step:focus{outline:2px solid #ffea00 !important;outline-offset:1px !important;}
+@media(max-width:420px){
+  .card .qty-wrap{grid-template-rows:minmax(0,1fr) 26px !important;gap:5px !important;}
+  .card .qty-display{font-size:26px !important;border-radius:9px !important;}
+  .card .qty-step{height:26px !important;min-height:26px !important;max-height:26px !important;font-size:21px !important;}
 }
 @media(min-width:820px){
-  :root{--card-body-h:126px !important;}
-  .card .body{height:126px !important;}
-  .card .fields{gap:10px !important;padding:10px !important;}
-  .card .qty-panel{padding:9px 10px !important;gap:2px !important;}
-  .card .qty-title{font-size:14px !important;}
-  .card .qty-subtitle{font-size:10px !important;margin-bottom:6px !important;}
-  .card .qty-control{height:50px !important;min-height:50px !important;max-height:50px !important;grid-template-columns:44px minmax(0,1fr) 44px !important;}
-  .card .qty-control .qty-step{font-size:26px !important;}
-  .card .qty-control .qty-value{font-size:34px !important;}
+  .card .qty-wrap{grid-template-rows:minmax(0,1fr) 34px !important;gap:7px !important;}
+  .card .qty-display{font-size:34px !important;}
+  .card .qty-step{height:34px !important;min-height:34px !important;max-height:34px !important;font-size:25px !important;}
 }
-/* v9.8.4 safety: override old grid placement rules for step buttons */
-.card .qty-control .qty-minus{grid-column:1 !important;grid-row:1 !important;}
-.card .qty-control .qty-value{grid-column:2 !important;grid-row:1 !important;}
-.card .qty-control .qty-plus{grid-column:3 !important;grid-row:1 !important;}
