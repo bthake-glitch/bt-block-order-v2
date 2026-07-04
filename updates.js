@@ -1,4 +1,4 @@
-const APP_VERSION = '9.2';
+const APP_VERSION = '9.2.1';
 let updateRegistration = null;
 let refreshingForUpdate = false;
 
