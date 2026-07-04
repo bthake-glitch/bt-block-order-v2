@@ -1116,3 +1116,52 @@ main{overflow:hidden;}
   .card .qty-step{height:36px !important;min-height:36px !important;max-height:36px !important;font-size:24px !important;}
   .card .qty-wrap input{font-size:34px !important;}
 }
+
+
+/* v9.2.2 pallet label fix - keep labels visible without breaking button fit */
+.card .fields > label{
+  grid-template-rows:27px minmax(0,1fr) !important;
+  gap:2px !important;
+  text-align:center !important;
+  line-height:1.02 !important;
+  white-space:normal !important;
+  overflow:hidden !important;
+}
+.card .qty-label-unit{
+  display:block !important;
+  margin:1px 0 0 !important;
+  font-size:8px !important;
+  line-height:1 !important;
+  letter-spacing:.2px !important;
+  color:inherit !important;
+  opacity:.92 !important;
+}
+.card .qty-wrap{
+  grid-template-rows:minmax(0,1fr) 23px !important;
+  gap:3px !important;
+}
+.card .qty-wrap input{
+  min-height:0 !important;
+  max-height:100% !important;
+  font-size:23px !important;
+}
+.card .qty-step{
+  height:23px !important;
+  min-height:23px !important;
+  max-height:23px !important;
+}
+@media(max-width:420px){
+  .card .fields{gap:5px !important;padding:5px 5px !important;}
+  .card .fields > label{grid-template-rows:27px minmax(0,1fr) !important;padding:3px !important;gap:2px !important;font-size:9px !important;}
+  .card .qty-label-unit{font-size:8px !important;}
+  .card .qty-wrap{grid-template-rows:minmax(0,1fr) 23px !important;gap:3px !important;}
+  .card .qty-step{height:23px !important;min-height:23px !important;max-height:23px !important;font-size:18px !important;}
+  .card .qty-wrap input{font-size:23px !important;}
+}
+@media(min-width:820px){
+  .card .fields > label{grid-template-rows:32px minmax(0,1fr) !important;gap:5px !important;}
+  .card .qty-label-unit{font-size:9px !important;}
+  .card .qty-wrap{grid-template-rows:minmax(0,1fr) 36px !important;gap:5px !important;}
+  .card .qty-step{height:36px !important;min-height:36px !important;max-height:36px !important;font-size:24px !important;}
+  .card .qty-wrap input{font-size:34px !important;}
+}
