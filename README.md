@@ -1,13 +1,11 @@
-BT Block Order v2 - v9.8 Settings & Preferences
+BT Block Order v2 - v9.8.1 iPhone Safari Quantity Fix
 
-Changes:
-- Added Settings panel.
-- Button sounds can be turned on/off.
-- Optional vibration feedback added for plus/minus buttons.
-- Confirm Clear All can be turned on/off.
-- Keeps v9.7 soft tick and v9.6 instant search.
+Change:
+- Fixes iPhone Safari issue where quantity numbers could render as coloured bars or disappear.
+- Keeps v9.8 Settings & Preferences.
+- No layout or workflow changes.
 
-QA:
-- Version numbers checked.
-- Quantity panel left unchanged.
-- Search, job panel and footer layout preserved.
+QA notes:
+- Quantity panel left in the v9.8 layout.
+- Added Safari-safe input rendering for quantity fields.
+- Version files updated to 9.8.1.
